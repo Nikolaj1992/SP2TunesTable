@@ -1,0 +1,21 @@
+### Retrieve all plants
+GET {{url}}/api/plants
+
+### Retrieve plant by id
+GET {{url}}/api/plants/1
+Accept: application/json
+
+### Retrieve plants by type
+GET {{url}}/api/plants/type/rose
+Accept: application/json
+
+### Add a new plant
+POST {{url}}/api/plants
+Content-Type: application/json
+
+{
+  "plantType": "Rose",
+  "name": "Gallicanae",
+  "maxHeight": 350,
+  "price": 199.50
+}
