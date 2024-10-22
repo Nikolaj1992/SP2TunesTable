@@ -1,7 +1,7 @@
 package app.routes;
 
 import app.controllers.impl.ArtistController;
-//import app.security.enums.Role;
+import app.security.enums.Role;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
