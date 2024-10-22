@@ -36,7 +36,8 @@ public class JsonReader {
             System.out.println("release date: " + album.getReleaseDate());
             System.out.println("rdp: " + album.getReleaseDatePrecision());
             System.out.println("artists: " + album.getArtists().toString());
-            System.out.println("songs: " + album.getTracks().getSongs().toString());
+            songs.forEach(System.out::println);
+//            System.out.println("songs: " + album.getTracks().getSongs().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
