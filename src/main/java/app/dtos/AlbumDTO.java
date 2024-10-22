@@ -26,5 +26,5 @@ public class AlbumDTO {
     @JsonProperty("artists")
     List<ArtistDTO> artists;
     @JsonProperty("tracks")
-    List<SongDTO> songs;
+    TracksDTO tracks;
 }

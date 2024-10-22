@@ -48,7 +48,7 @@ public class AlbumController implements IController<AlbumDTO,Integer> {
     }
 
     @Override
-    public Album validateEntity(Context ctx) {
+    public AlbumDTO validateEntity(Context ctx) {
         return null;
     }
 }
