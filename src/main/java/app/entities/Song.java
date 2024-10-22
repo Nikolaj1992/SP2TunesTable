@@ -19,6 +19,7 @@ public class Song {
     private String type;
     private int songNumber;
     @ManyToOne
+    @ToString.Exclude
     private Album album;
 
     public Song(SongDTO dto){

@@ -28,6 +28,7 @@ public class Album {
     private int totalSongs;
     private String releaseDate;
     @ManyToOne
+    @ToString.Exclude
     private Artist artist;
     @OneToMany
     @Cascade(CascadeType.PERSIST)
@@ -37,12 +38,11 @@ public class Album {
         this.name = dto.getName();
         this.type = dto.getType();
         this.totalSongs = dto.getTotalSongs();
-        addSongs(dto.getTracks().getSongs());
-        addReleaseDate(dto.getReleaseDate(), dto.getReleaseDatePrecision());
+        this.releaseDate = dto.getReleaseDate();
     }
 
     public void addSongs(List<SongDTO> songs) {
-        if (!this.songs.isEmpty() && !songs.isEmpty()) {
+        if (this.songs.isEmpty() && !songs.isEmpty()) {
             for (SongDTO dto : songs) {
                 Song song = new Song(dto);
                 String id = this.id + "-" + song.getSongNumber();
@@ -51,14 +51,6 @@ public class Album {
                 this.songs.add(song);
             }
         }
-    }
-
-    private void addReleaseDate(String rd, String rdp) {
-        if (this.releaseDate != null && rd != "" && rdp == "day") {
-            this.releaseDate = rd;
-        }
-        //rd = release date
-        //rdp = release date precision
     }
 
 }

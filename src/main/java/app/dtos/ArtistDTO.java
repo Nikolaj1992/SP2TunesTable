@@ -23,7 +23,7 @@ public class ArtistDTO {
     List<AlbumDTO> albums;
 
     public ArtistDTO(Artist artist) {
-        this.id = artist.getId();
+        this.id = String.valueOf(artist.getId());
         this.name = artist.getName();
         this.type = artist.getType();
         this.albums = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();

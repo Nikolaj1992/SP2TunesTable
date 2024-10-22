@@ -41,7 +41,6 @@ public class JsonReader {
             System.out.println("total songs: " + album.getTotalSongs());
             System.out.println("total songs: " + album.getTotalSongs());
             System.out.println("release date: " + album.getReleaseDate());
-            System.out.println("rdp: " + album.getReleaseDatePrecision());
             System.out.println("artists: " + album.getArtists().toString());
             songs.forEach(System.out::println);
 //            System.out.println("songs: " + album.getTracks().getSongs().toString());
