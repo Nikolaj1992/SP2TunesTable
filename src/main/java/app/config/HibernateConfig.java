@@ -1,5 +1,10 @@
 package app.config;
 
+import app.entities.Album;
+import app.entities.Artist;
+import app.entities.Song;
+import app.security.entities.Role;
+import app.security.entities.User;
 import app.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -39,6 +44,11 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
+        configuration.addAnnotatedClass(Artist.class);
+        configuration.addAnnotatedClass(Album.class);
+        configuration.addAnnotatedClass(Song.class);
+        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Role.class);
 //        configuration.addAnnotatedClass(Hotel.class);
     }
 
@@ -94,7 +104,8 @@ public class HibernateConfig {
         String DBName = Utils.getPropertyValue("DB_NAME", "config.properties");
         props.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/" + DBName);
         props.put("hibernate.connection.username", "postgres");
-        props.put("hibernate.connection.password", System.getenv("DB_PASSWORD"));
+//        props.put("hibernate.connection.password", System.getenv("DB_PASSWORD")); //having this on causes a nullpointerexception
+        props.put("hibernate.connection.password","postgres");
         return props;
     }
 

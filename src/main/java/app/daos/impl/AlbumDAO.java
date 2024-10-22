@@ -68,7 +68,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
                 throw new DaoException.EntityNotFoundException(Album.class, integer);
             }
             a.setName(albumDTO.getName());
-            a.setPopularity(albumDTO.getPopularity());
+//            a.setPopularity(albumDTO.getPopularity());
             Album mergedAlbum = em.merge(a);
             em.getTransaction().commit();
             return mergedAlbum != null ? new AlbumDTO(mergedAlbum) : null;
