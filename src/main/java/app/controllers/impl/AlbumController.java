@@ -4,11 +4,12 @@ import app.config.HibernateConfig;
 import app.controllers.IController;
 import app.daos.impl.AlbumDAO;
 import app.dtos.AlbumDTO;
-import app.entities.Album;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
-public class AlbumController implements IController<AlbumDTO,Integer> {
+import java.util.List;
+
+public class AlbumController implements IController<AlbumDTO, Integer> {
 
     private final AlbumDAO dao;
 
@@ -19,36 +20,64 @@ public class AlbumController implements IController<AlbumDTO,Integer> {
 
     @Override
     public void read(Context ctx) {
-
+        // request
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        // DTO
+        AlbumDTO albumDTO = dao.read(id);
+        // response
+        ctx.res().setStatus(200);
+        ctx.json(albumDTO, AlbumDTO.class);
     }
 
     @Override
     public void readAll(Context ctx) {
-
+        // List of DTOS
+         List<AlbumDTO> albumDTOS = dao.readAll();
+        // response
+         ctx.res().setStatus(200);
+         ctx.json(albumDTOS, AlbumDTO.class);
     }
 
     @Override
     public void create(Context ctx) {
-
+        // request
+        AlbumDTO jsonRequest = ctx.bodyAsClass(AlbumDTO.class);
+        // DTO
+        AlbumDTO albumDTO = dao.create(jsonRequest);
+        // response
+        ctx.res().setStatus(201);
+        ctx.json(albumDTO, AlbumDTO.class);
     }
 
     @Override
     public void update(Context ctx) {
-
+        // request
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        // dto
+        AlbumDTO albumDTO = dao.update(id, validateEntity(ctx));
+        // response
+        ctx.res().setStatus(200);
+        ctx.json(albumDTO, AlbumDTO.class);
     }
 
     @Override
     public void delete(Context ctx) {
-
+        // request
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        dao.delete(id);
+        // response
+        ctx.res().setStatus(204);
     }
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
-        return false;
+        return dao.validatePrimaryKey(integer);
     }
 
     @Override
-    public Album validateEntity(Context ctx) {
-        return null;
+    public AlbumDTO validateEntity(Context ctx) {       // TODO add checks
+        return ctx.bodyValidator(AlbumDTO.class)
+//                .check(dto -> dto.getName() != null && dto.getName().length() > 0, "Name cannot be null or empty")
+                .get();
     }
 }
