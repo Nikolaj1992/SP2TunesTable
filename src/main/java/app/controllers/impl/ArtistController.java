@@ -7,7 +7,9 @@ import app.dtos.ArtistDTO;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
-public class ArtistController implements IController<ArtistDTO,Integer> {
+import java.util.List;
+
+public class ArtistController implements IController<ArtistDTO, Integer> {
 
     private final ArtistDAO dao;
 
@@ -18,36 +20,51 @@ public class ArtistController implements IController<ArtistDTO,Integer> {
 
     @Override
     public void read(Context ctx) {
-
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        ArtistDTO artistDTO = dao.read(id);
+        ctx.res().setStatus(200);
+        ctx.json(artistDTO, ArtistDTO.class);
     }
 
     @Override
     public void readAll(Context ctx) {
-
+        List<ArtistDTO> artistDTOS = dao.readAll();
+        ctx.res().setStatus(200);
+        ctx.json(artistDTOS, ArtistDTO.class);
     }
 
     @Override
     public void create(Context ctx) {
-
+        ArtistDTO jsonRequest = ctx.bodyAsClass(ArtistDTO.class);
+        ArtistDTO artistDTO = dao.create(jsonRequest);
+        ctx.res().setStatus(201);
+        ctx.json(artistDTO, ArtistDTO.class);
     }
 
     @Override
     public void update(Context ctx) {
-
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        ArtistDTO artistDTO = dao.update(id, validateEntity(ctx));
+        ctx.res().setStatus(200);
+        ctx.json(artistDTO, ArtistDTO.class);
     }
 
     @Override
     public void delete(Context ctx) {
-
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        dao.delete(id);
+        ctx.res().setStatus(204);
     }
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
-        return false;
+        return dao.validatePrimaryKey(integer);
     }
 
     @Override
-    public ArtistDTO validateEntity(Context ctx) {
-        return null;
+    public ArtistDTO validateEntity(Context ctx) {      // TODO add needed checks
+        return ctx.bodyValidator(ArtistDTO.class)
+//                .check(a -> a.getName() != null && !a.getName().isEmpty(), "Invalid name")
+                .get();
     }
 }
