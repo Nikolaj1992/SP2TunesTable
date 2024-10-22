@@ -2,17 +2,19 @@ package app.routes;
 
 import io.javalin.apibuilder.EndpointGroup;
 
-import static io.javalin.apibuilder.ApiBuilder.path;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
 
-//    private final HotelRoute hotelRoute = new HotelRoute();
-//    private final RoomRoute roomRoute = new RoomRoute();
+    private final ArtistRoute artistRoute = new ArtistRoute();
+    private final AlbumRoute albumRoute = new AlbumRoute();
+    private final SongRoute songRoute = new SongRoute();
 
     public EndpointGroup getRoutes() {
         return () -> {
-//                path("/hotels", hotelRoute.getRoutes());
-//                path("/rooms", roomRoute.getRoutes());
+            path("/artists", artistRoute.getRoutes());
+            path("/albums", albumRoute.getRoutes());
+            path("/songs", songRoute.getRoutes());
         };
     }
 }
