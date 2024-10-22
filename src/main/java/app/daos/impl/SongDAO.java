@@ -3,6 +3,7 @@ package app.daos.impl;
 import app.daos.IDAO;
 import app.dtos.SongDTO;
 import app.entities.Song;
+import app.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -26,7 +27,12 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
     public SongDTO read(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Song song = em.find(Song.class, integer);
+            if (song == null) {
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
+            }
             return new SongDTO(song);
+        } catch (Exception e) {
+            throw new DaoException.EntityNotFoundException(Song.class, integer);
         }
     }
 
@@ -35,6 +41,8 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<SongDTO> query = em.createQuery("SELECT new app.dtos.SongDTO(s) FROM Song s", SongDTO.class);
             return query.getResultList();
+        } catch (Exception e) {
+            throw new DaoException.EntityFindAllException(Song.class, e);
         }
     }
 
@@ -46,6 +54,8 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
             em.persist(song);
             em.getTransaction().commit();
             return new SongDTO(song);
+        } catch (Exception e) {
+            throw new DaoException.EntityCreateException(Song.class, e);
         }
     }
 
@@ -54,11 +64,16 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Song s = em.find(Song.class, integer);
+            if (s == null) {
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
+            }
             s.setName(songDTO.getName());
             s.setDuration(songDTO.getDuration());
             Song mergedSong = em.merge(s);
             em.getTransaction().commit();
             return mergedSong != null ? new SongDTO(mergedSong) : null;
+        } catch (Exception e) {
+            throw new DaoException.EntityUpdateException(Song.class, integer, e);
         }
     }
 
@@ -67,10 +82,13 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Song song = em.find(Song.class, integer);
-            if (song != null) {
-                em.remove(song);
+            if (song == null) {
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
             }
+            em.remove(song);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new DaoException.EntityDeleteException(Song.class, integer, e);
         }
     }
 

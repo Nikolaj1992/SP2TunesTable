@@ -3,6 +3,7 @@ package app.daos.impl;
 import app.daos.IDAO;
 import app.dtos.AlbumDTO;
 import app.entities.Album;
+import app.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -26,7 +27,12 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
     public AlbumDTO read(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Album album = em.find(Album.class, integer);
+            if (album == null) {
+                throw new DaoException.EntityNotFoundException(Album.class, integer);
+            }
             return new AlbumDTO(album);
+        } catch (Exception e) {
+            throw new DaoException.EntityNotFoundException(Album.class, integer);
         }
     }
 
@@ -35,6 +41,8 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<AlbumDTO> query = em.createQuery("SELECT new app.dtos.AlbumDTO(a) FROM Album a", AlbumDTO.class);
             return query.getResultList();
+        } catch (Exception e) {
+            throw new DaoException.EntityFindAllException(Album.class, e);
         }
     }
 
@@ -46,6 +54,8 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             em.persist(album);
             em.getTransaction().commit();
             return new AlbumDTO(album);
+        } catch (Exception e) {
+            throw new DaoException.EntityCreateException(Album.class, e);
         }
     }
 
@@ -54,11 +64,16 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Album a = em.find(Album.class, integer);
+            if (a == null) {
+                throw new DaoException.EntityNotFoundException(Album.class, integer);
+            }
             a.setName(albumDTO.getName());
             a.setPopularity(albumDTO.getPopularity());
             Album mergedAlbum = em.merge(a);
             em.getTransaction().commit();
             return mergedAlbum != null ? new AlbumDTO(mergedAlbum) : null;
+        } catch (Exception e) {
+            throw new DaoException.EntityUpdateException(Album.class, integer, e);
         }
     }
 
@@ -67,10 +82,13 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Album album = em.find(Album.class, integer);
-            if (album != null) {
-                em.remove(album);
+            if (album == null) {
+                throw new DaoException.EntityNotFoundException(Album.class, integer);
             }
+            em.remove(album);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new DaoException.EntityDeleteException(Album.class, integer, e);
         }
     }
 
