@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class Album {
     @ManyToOne
     private Artist artist;
     @OneToMany
+    @Cascade(CascadeType.PERSIST)
     private List<Song> songs = new ArrayList<>();
 
     public Album(AlbumDTO dto) {
@@ -38,7 +41,7 @@ public class Album {
         addReleaseDate(dto.getReleaseDate(), dto.getReleaseDatePrecision());
     }
 
-    private void addSongs(List<SongDTO> songs) {
+    public void addSongs(List<SongDTO> songs) {
         if (!this.songs.isEmpty() && !songs.isEmpty()) {
             for (SongDTO dto : songs) {
                 Song song = new Song(dto);

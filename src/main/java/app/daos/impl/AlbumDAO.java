@@ -55,7 +55,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             em.getTransaction().begin();
             Album a = em.find(Album.class, integer);
             a.setName(albumDTO.getName());
-            a.setPopularity(albumDTO.getPopularity());
+//            a.setPopularity(albumDTO.getPopularity());
             Album mergedAlbum = em.merge(a);
             em.getTransaction().commit();
             return mergedAlbum != null ? new AlbumDTO(mergedAlbum) : null;

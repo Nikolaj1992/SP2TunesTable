@@ -12,12 +12,17 @@ import java.util.List;
 
 public class JsonReader {
 
-    public static void main(String[] args) {
+    public static AlbumDTO readAlbum(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();
-
+        AlbumDTO albumResult = null;
         try {
             // Read JSON file and convert to JsonNode
-            JsonNode rootNode = objectMapper.readTree(new File("src/result.json"));
+            JsonNode rootNode = null;
+            if (filePath.equals("")){
+            rootNode = objectMapper.readTree(new File("src/result.json"));
+            } else {
+            rootNode = objectMapper.readTree(new File(filePath));
+            }
 
             // Deserialize general information into AlbumDTO
             AlbumDTO album = objectMapper.treeToValue(rootNode, AlbumDTO.class);
@@ -27,6 +32,8 @@ public class JsonReader {
                     objectMapper.getTypeFactory().constructCollectionType(List.class, SongDTO.class));
             album.setTracks(new TracksDTO()); // Initialize TracksDTO
             album.getTracks().setSongs(songs); // Set the items in TracksDTO
+
+            albumResult = album;
 
             // Print the item details
             System.out.println("name: " + album.getName());
@@ -41,5 +48,6 @@ public class JsonReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return albumResult;
     }
 }
