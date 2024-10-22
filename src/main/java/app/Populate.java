@@ -9,6 +9,11 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Populate {
     public static void main(String[] args) {
+        Populate populate = new Populate();
+        populate.run();
+    }
+
+    public void run(){
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         AlbumDTO albumDTO = JsonReader.readAlbum("");
         Artist artist = new Artist(albumDTO.getArtists().get(0));
