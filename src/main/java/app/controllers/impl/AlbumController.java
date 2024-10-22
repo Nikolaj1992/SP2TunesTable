@@ -75,6 +75,7 @@ public class AlbumController implements IController<AlbumDTO, Integer> {
     }
 
     @Override
+
     public AlbumDTO validateEntity(Context ctx) {       // TODO add checks
         return ctx.bodyValidator(AlbumDTO.class)
 //                .check(dto -> dto.getName() != null && dto.getName().length() > 0, "Name cannot be null or empty")
