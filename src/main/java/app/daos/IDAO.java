@@ -4,10 +4,15 @@ import java.util.List;
 
 public interface IDAO<T, I> {
 
-    T read(I i);
+    T read(I id);
+
     List<T> readAll();
-    T create(T t);
-    T update(I i, T t);
-    void delete(I i);
-    boolean validatePrimaryKey(I i);
+
+    T create(T entity);
+
+    T update(I id, T entity);
+
+    void delete(I id);
+
+    boolean validatePrimaryKey(I id);
 }
