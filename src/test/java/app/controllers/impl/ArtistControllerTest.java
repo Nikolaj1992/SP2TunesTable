@@ -1,18 +1,13 @@
 package app.controllers.impl;
 
-import app.config.HibernateConfig;
-import app.controllers.impl.AlbumController;
-import app.dtos.AlbumDTO;
 import io.javalin.Javalin;
-import io.restassured.RestAssured;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.*;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Testcontainers
-class AlbumControllerTest {
+class ArtistControllerTest {
 
     private static Javalin app;
     private static EntityManagerFactory emf;
@@ -58,4 +53,5 @@ class AlbumControllerTest {
     @Test
     void delete() {
     }
+
 }
