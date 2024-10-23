@@ -4,6 +4,9 @@ import app.config.HibernateConfig;
 import app.controllers.IController;
 import app.daos.impl.ArtistDAO;
 import app.dtos.ArtistDTO;
+import app.entities.Album;
+import app.entities.Artist;
+import app.exceptions.DaoException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -16,6 +19,26 @@ public class ArtistController implements IController<ArtistDTO, Integer> {
     public ArtistController() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         this.dao = ArtistDAO.getInstance(emf);
+    }
+
+    public void addAlbum(Context ctx) {
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        int albumID = ctx.pathParamAsClass("id2", Integer.class).get();
+        ArtistDTO artistDTO = dao.read(id);
+        Artist artist = new Artist(artistDTO);
+        try (var em = HibernateConfig.getEntityManagerFactory().createEntityManager()) {
+            em.getTransaction().begin();
+            try {
+            Album album = em.find(Album.class, albumID);
+            artist.addAlbum(album);
+            em.persist(artist);
+            } catch (DaoException.EntityNotFoundException e) {
+                throw new DaoException(e.getMessage());
+            }
+            em.getTransaction().commit();
+        }
+        ctx.res().setStatus(200);
+        ctx.json(new ArtistDTO(artist), ArtistDTO.class);
     }
 
     @Override

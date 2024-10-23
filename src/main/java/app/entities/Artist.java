@@ -87,4 +87,9 @@ public class Artist {
             }
         }
     }
+
+    public void transferFromAlbumToSingle(String albumId, String songId){
+        //might be able to copy a lot from the method above
+    }
+
 }

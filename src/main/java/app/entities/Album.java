@@ -36,7 +36,9 @@ public class Album {
     public Album(AlbumDTO dto) {
         this.name = dto.getName();
         this.type = dto.getType();
+        if (!dto.getTracks().getSongs().isEmpty()){
         this.totalSongs = dto.getTotalSongs();
+        }
         this.releaseDate = dto.getReleaseDate();
     }
 
@@ -49,17 +51,24 @@ public class Album {
                 song.setAlbum(this);
                 this.songs.add(song);
             }
+                this.totalSongs = this.songs.size();
         }
     }
 
     public void addSongs(List<Song> songs) { //this is used by Populate
         if (this.songs.isEmpty() && !songs.isEmpty()) {
             for (Song song : songs) {
-                String id = this.id + "-" + song.getSongNumber();
+                String id;
+                if (song.getSongNumber() != 0){
+                    id = this.id + "-" + song.getSongNumber();
+                } else {
+                    id = this.id + "-" + this.songs.size()+1;
+                }
                 song.setId(id);
                 song.setAlbum(this);
                 this.songs.add(song);
             }
+                this.totalSongs = this.songs.size();
         }
     }
 

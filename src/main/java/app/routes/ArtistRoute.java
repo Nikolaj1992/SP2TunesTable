@@ -14,6 +14,7 @@ public class ArtistRoute {
 
         return () -> {
             post("/", artistController::create, Role.USER);
+            post("/{id}/add_album/{id2}", artistController::addAlbum);
             get("/", artistController::readAll);
             get("/{id}", artistController::read);
             put("/{id}", artistController::update);
