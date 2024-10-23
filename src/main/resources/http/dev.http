@@ -32,7 +32,23 @@ GET {{url}}/protected/admin_demo/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
+### Add a new artist
+POST {{url}}/api/artists
+Content-Type: application/json
 
+{
+  "name": "Sire Bean",
+  "type": "artist"
+}
+
+### Add album to artist (EXPERIMENTAL METHOD)
+POST {{url}}/api/artists/1/add_album/0-1
+Content-Type: application/json
+
+{
+  "name": "Sire Bean",
+  "type": "artist"
+}
 
 ### Retrieve all albums
 GET {{url}}/api/albums
@@ -46,10 +62,8 @@ POST {{url}}/api/albums
 Content-Type: application/json
 
 {
-  "plantType": "Rose",
   "name": "Gallicanae",
-  "maxHeight": 350,
-  "price": 199.50
+  "type": "album"
 }
 
 ###

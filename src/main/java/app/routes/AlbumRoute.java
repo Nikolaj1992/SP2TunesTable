@@ -13,7 +13,7 @@ public class AlbumRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            post("/", albumController::create, Role.USER);
+            post("/", albumController::create);
             get("/", albumController::readAll);
             get("/{id}", albumController::read);
             put("/{id}", albumController::update);
