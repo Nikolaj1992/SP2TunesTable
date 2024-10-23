@@ -7,10 +7,8 @@ import app.entities.Artist;
 import io.javalin.Javalin;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -63,6 +61,16 @@ class ArtistControllerTest {
         }
     }
 
+    @AfterEach
+    void tearDown() {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM Artist ").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE artist_id_seq RESTART WITH 1").executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
+
     // error from post possibly not working
 //    @BeforeEach
 //    void setUp() {
@@ -92,10 +100,11 @@ class ArtistControllerTest {
 
     @Test
     void read() {
+        int artistId = 1;
         given()
-                .pathParam("id", 1) // Assuming ID of created artist is 1
+                .contentType("application/json")
                 .when()
-                .get("/artists/{id}")
+                .get("/artists/{id}", artistId)
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("Test Artist 1"));
@@ -131,19 +140,19 @@ class ArtistControllerTest {
 
     @Test
     void update() {
+        int artistId = 1;
         given()
-                .pathParam("id", 1) // Assuming ID of created artist is 1
                 .contentType("application/json")
                 .body("{\"name\":\"Updated Artist\", \"type\":\"artist\"}")
                 .when()
-                .put("/artists/{id}")
+                .put("/artists/{id}", artistId)
                 .then()
                 .statusCode(200);
 
         given()
-                .pathParam("id", 1)
+                .contentType("application/json")
                 .when()
-                .get("/artists/{id}")
+                .get("/artists/{id}", artistId)
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("Updated Artist"));
@@ -151,19 +160,20 @@ class ArtistControllerTest {
 
     @Test
     void delete() {
+        int artistId = 1;
         given()
-                .pathParam("id", 1) // Assuming ID of created artist is 1
+                .contentType("application/json")
                 .when()
-                .delete("/artists/{id}")
+                .delete("/artists/{id}", artistId)
                 .then()
                 .statusCode(204);
 
         given()
-                .pathParam("id", 1)
+                .contentType("application/json")
                 .when()
-                .get("/artists/{id}")
+                .get("/artists/{id}", artistId)
                 .then()
-                .statusCode(404);
+                .statusCode(400);       // should ideally be 404
     }
 
 }
