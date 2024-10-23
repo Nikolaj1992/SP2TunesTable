@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class AlbumController implements IController<AlbumDTO, Integer> {
+public class AlbumController implements IController<AlbumDTO, String> {
 
     private final AlbumDAO dao;
 
@@ -21,7 +21,7 @@ public class AlbumController implements IController<AlbumDTO, Integer> {
     @Override
     public void read(Context ctx) {
         // request
-        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
         // DTO
         AlbumDTO albumDTO = dao.read(id);
         // response
@@ -52,7 +52,7 @@ public class AlbumController implements IController<AlbumDTO, Integer> {
     @Override
     public void update(Context ctx) {
         // request
-        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
         // dto
         AlbumDTO albumDTO = dao.update(id, validateEntity(ctx));
         // response
@@ -63,15 +63,15 @@ public class AlbumController implements IController<AlbumDTO, Integer> {
     @Override
     public void delete(Context ctx) {
         // request
-        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
         dao.delete(id);
         // response
         ctx.res().setStatus(204);
     }
 
     @Override
-    public boolean validatePrimaryKey(Integer integer) {
-        return dao.validatePrimaryKey(integer);
+    public boolean validatePrimaryKey(String s) {
+        return dao.validatePrimaryKey(s);
     }
 
     @Override
