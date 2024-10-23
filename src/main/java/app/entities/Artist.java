@@ -40,7 +40,7 @@ public class Artist {
     public void addAlbum(AlbumDTO albumDTO, int id){
         Album album = new Album(albumDTO);
         if (!albums.contains(album)){
-            album.setId(this.id + "-" + String.valueOf(id+1));
+            album.setId(this.id + "-" + String.valueOf(id));
             album.addSongs(albumDTO.getTracks().getSongs());
             album.setArtist(this);
             this.albums.add(album);

@@ -17,15 +17,14 @@ public class Populate {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         AlbumDTO albumDTO = JsonReader.readAlbum("");
         Artist artist = new Artist(albumDTO.getArtists().get(0));
-        int existingAlbums = 1; //starts at one because place 0 is for singles
+        int availableAlbumIndex = 1; //starts at one because place 0 is for singles
+        int existingAlbums = 0;
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.persist(artist);
-            existingAlbums = existingAlbums + 2;
-//            Album album = new Album(albumDTO);
-//            album.addSongs(albumDTO.getTracks().getSongs());
-            artist.addAlbum(albumDTO,existingAlbums);
-//            em.persist(album);
+            existingAlbums = 2;
+            availableAlbumIndex = availableAlbumIndex + existingAlbums;
+            artist.addAlbum(albumDTO,availableAlbumIndex);
             em.persist(artist);
             em.getTransaction().commit();
         }
