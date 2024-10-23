@@ -51,6 +51,8 @@ public class SongDAO implements IDAO<SongDTO, String> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Song song = new Song(songDTO);
+            int existingSongs = em.createQuery("SELECT COUNT(s) FROM Song s", Integer.class).getSingleResult();
+            song.giveId(existingSongs);
             em.persist(song);
             em.getTransaction().commit();
             return new SongDTO(song);

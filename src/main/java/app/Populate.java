@@ -2,7 +2,6 @@ package app;
 
 import app.config.HibernateConfig;
 import app.dtos.AlbumDTO;
-import app.entities.Album;
 import app.entities.Artist;
 import app.utils.json.JsonReader;
 import jakarta.persistence.EntityManagerFactory;
@@ -24,7 +23,7 @@ public class Populate {
             em.persist(artist);
             existingAlbums = 2;
             availableAlbumIndex = availableAlbumIndex + existingAlbums;
-            artist.addAlbum(albumDTO,availableAlbumIndex);
+            artist.addAlbumAsDTO(albumDTO,availableAlbumIndex);
             em.persist(artist);
             em.getTransaction().commit();
         }

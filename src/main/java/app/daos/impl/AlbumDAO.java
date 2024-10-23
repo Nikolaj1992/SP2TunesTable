@@ -51,6 +51,8 @@ public class AlbumDAO implements IDAO<AlbumDTO, String> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Album album = new Album(albumDTO);
+            int existingAlbums = em.createQuery("SELECT COUNT(a) FROM Album a", Integer.class).getSingleResult();
+            album.giveId(existingAlbums);
             em.persist(album);
             em.getTransaction().commit();
             return new AlbumDTO(album);
