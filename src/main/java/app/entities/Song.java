@@ -1,6 +1,7 @@
 package app.entities;
 
 import app.dtos.SongDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -14,6 +15,7 @@ import lombok.*;
 @Entity
 public class Song {
     @Id
+    @Column(columnDefinition = "VARCHAR(255)")
     private String id; //is given when an album is created, after an artist is persisted
     private String name;
     private String type;

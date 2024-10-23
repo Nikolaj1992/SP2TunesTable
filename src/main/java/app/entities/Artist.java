@@ -20,6 +20,7 @@ import java.util.List;
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(columnDefinition = "INTEGER(255)")
     private Long id;
     private String name;
     private String type;

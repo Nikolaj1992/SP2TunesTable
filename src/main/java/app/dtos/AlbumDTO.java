@@ -37,4 +37,9 @@ public class AlbumDTO {
         this.artists = List.of(new ArtistDTO(album.getArtist()));
         this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
     }
+
+    public AlbumDTO(String name, String type){
+        this.name = name;
+        this.type = type;
+    }
 }

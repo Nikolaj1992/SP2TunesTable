@@ -2,10 +2,7 @@ package app.entities;
 
 import app.dtos.AlbumDTO;
 import app.dtos.SongDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -21,6 +18,7 @@ import java.util.List;
 @Entity
 public class Album {
     @Id
+    @Column(columnDefinition = "VARCHAR(255)")
     private String id; //is given right after Artist is persisted
     private String name;
     private String type;
@@ -39,7 +37,9 @@ public class Album {
         if (!dto.getTracks().getSongs().isEmpty()){
         this.totalSongs = dto.getTotalSongs();
         }
+        if (dto.getReleaseDate() != null) {
         this.releaseDate = dto.getReleaseDate();
+        }
     }
 
     public void addSongsAsDTO(List<SongDTO> songs) { //this is used by Populate
