@@ -1,16 +1,48 @@
-### Retrieve all plants
-GET {{url}}/api/plants
+### A simple get request to the test endpoint. No need for login
+GET {{url}}/auth/test/
 
-### Retrieve plant by id
-GET {{url}}/api/plants/1
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "test",
+    "password": "test123"
+}
+
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "test",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+###
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+
+### Retrieve all albums
+GET {{url}}/api/albums
+
+### Retrieve album by id
+GET {{url}}/api/albums/1
 Accept: application/json
 
-### Retrieve plants by type
-GET {{url}}/api/plants/type/rose
-Accept: application/json
-
-### Add a new plant
-POST {{url}}/api/plants
+### Add a new album
+POST {{url}}/api/albums
 Content-Type: application/json
 
 {
@@ -19,3 +51,17 @@ Content-Type: application/json
   "maxHeight": 350,
   "price": 199.50
 }
+
+###
+PUT {{url}}/api/albums/1
+Content-Type: application/json
+
+{
+  "plantType": "Rose",
+  "name": "Gallicanae",
+  "maxHeight": 350,
+  "price": 299.50
+}
+
+###
+DELETE {{url}}/api/albums/1
