@@ -17,7 +17,7 @@ public class AlbumRoute {
             get("/", albumController::readAll);
             get("/{id}", albumController::read);
             put("/{id}", albumController::update);
-            delete("/{id}", albumController::delete);
+            delete("/{id}", albumController::delete); //make this turn all songs into singles or add a word to indicate they are former album songs
         };
     }
 }
