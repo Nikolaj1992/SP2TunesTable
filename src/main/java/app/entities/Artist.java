@@ -20,8 +20,7 @@ import java.util.List;
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(columnDefinition = "INTEGER(255)")
-    private Long id;
+    private Integer id;
     private String name;
     private String type;
     @OneToMany(mappedBy = "artist")
@@ -36,7 +35,7 @@ public class Artist {
         this.type = dto.getType();
     }
     public Artist ArtistWithID(ArtistDTO dto){ //use this to convert from dto to entity
-        this.id = Long.valueOf(dto.getId());
+        this.id = Integer.valueOf(dto.getId());
         this.name = dto.getName();
         this.type = dto.getType();
         return this;
@@ -45,7 +44,7 @@ public class Artist {
     public void addSongs(List<Song> songs){
         for (Song song : songs) {
         if (!this.songs.contains(song)) {
-            song.setId(this.id + "-" + "0" + "-" + (this.songs.size() + 1));
+            song.setSongSearchId(this.id + "-" + "0" + "-" + (this.songs.size() + 1));
             song.setArtist(this);
             this.songs.add(song);
         }
@@ -55,7 +54,7 @@ public class Artist {
     public void addAlbumAsDTO(AlbumDTO albumDTO, int id){ //this is used by Populate
         Album album = new Album(albumDTO);
         if (!albums.contains(album)){
-            album.setId(this.id + "-" + String.valueOf(id));
+            album.setAlbumSearchId(this.id + "-" + String.valueOf(id));
             album.addSongsAsDTO(albumDTO.getTracks().getSongs());
             album.setArtist(this);
             this.albums.add(album);
@@ -64,7 +63,7 @@ public class Artist {
 
     public void addAlbum(Album album){
         if (!albums.contains(album)){
-            album.setId(this.id + "-" + (this.getAlbums().size() + 1));
+            album.setAlbumSearchId(this.id + "-" + (this.getAlbums().size() + 1));
             album.setArtist(this);
             this.albums.add(album);
         }
@@ -72,9 +71,9 @@ public class Artist {
 
     public void transferSinglesToAlbum(String albumId, String songId){
         for (Album album : albums) {
-            if (album.getId().equals(albumId)) {
+            if (album.getAlbumSearchId().equals(albumId)) {
                 for (Song song : songs) {
-                    if (song.getId().equals(songId)) {
+                    if (song.getSongSearchId().equals(songId)) {
                         if (!album.getSongs().contains(song)) {
                             try(var em = HibernateConfig.getEntityManagerFactory().createEntityManager()){
                                 Album foundAlbum = em.find(Album.class, albumId);

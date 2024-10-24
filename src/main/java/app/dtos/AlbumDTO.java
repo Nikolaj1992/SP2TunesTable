@@ -29,7 +29,7 @@ public class AlbumDTO {
     TracksDTO tracks;
 
     public AlbumDTO(Album album) {
-        this.id = album.getId();
+        this.id = album.getAlbumSearchId();
         this.name = album.getName();
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();

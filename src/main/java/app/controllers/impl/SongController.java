@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class SongController implements IController<SongDTO, String> {
+public class SongController implements IController<SongDTO, Integer> {
 
     private final SongDAO dao;
 
@@ -20,7 +20,7 @@ public class SongController implements IController<SongDTO, String> {
 
     @Override
     public void read(Context ctx) {
-        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        Integer id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
         SongDTO songDTO = dao.read(id);
         ctx.res().setStatus(200);
         ctx.json(songDTO, SongDTO.class);
@@ -43,7 +43,7 @@ public class SongController implements IController<SongDTO, String> {
 
     @Override
     public void update(Context ctx) {
-        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        Integer id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
         SongDTO songDTO = dao.update(id, validateEntity(ctx));
         ctx.res().setStatus(200);
         ctx.json(songDTO, SongDTO.class);
@@ -51,14 +51,14 @@ public class SongController implements IController<SongDTO, String> {
 
     @Override
     public void delete(Context ctx) {
-        String id = ctx.pathParamAsClass("id", String.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        Integer id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
         dao.delete(id);
         ctx.res().setStatus(204);
     }
 
     @Override
-    public boolean validatePrimaryKey(String s) {
-        return dao.validatePrimaryKey(s);
+    public boolean validatePrimaryKey(Integer integer) {
+        return dao.validatePrimaryKey(integer);
     }
 
     @Override

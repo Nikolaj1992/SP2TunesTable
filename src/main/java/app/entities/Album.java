@@ -18,8 +18,10 @@ import java.util.List;
 @Entity
 public class Album {
     @Id
-    @Column(columnDefinition = "VARCHAR(255)")
-    private String id; //is given right after Artist is persisted
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(columnDefinition = "VARCHAR(255)", unique = true)
+    private String albumSearchId; //is given right after Artist is persisted
     private String name;
     private String type;
     private int totalSongs;
@@ -46,8 +48,8 @@ public class Album {
         if (this.songs.isEmpty() && !songs.isEmpty()) {
             for (SongDTO dto : songs) {
                 Song song = new Song(dto);
-                String id = this.id + "-" + song.getSongNumber();
-                song.setId(id);
+                String id = this.albumSearchId + "-" + song.getSongNumber();
+                song.setSongSearchId(id);
                 song.setAlbum(this);
                 this.songs.add(song);
             }
@@ -60,11 +62,11 @@ public class Album {
             for (Song song : songs) {
                 String id;
                 if (song.getSongNumber() != 0){
-                    id = this.id + "-" + song.getSongNumber();
+                    id = this.albumSearchId + "-" + song.getSongNumber();
                 } else {
-                    id = this.id + "-" + this.songs.size()+1;
+                    id = this.albumSearchId + "-" + this.songs.size()+1;
                 }
-                song.setId(id);
+                song.setSongSearchId(id);
                 song.setAlbum(this);
                 this.songs.add(song);
             }
@@ -74,7 +76,7 @@ public class Album {
 
     public void giveId(int existingAlbums){ //do NOT run this if it already connected to an artist
         if (this.artist == null) {
-            this.id = "0" + "-" + (existingAlbums + 2); //the 2 makes up for counting 1 higher and makes sure 0 isn't used
+            this.albumSearchId = "0" + "-" + (existingAlbums + 2); //the 2 makes up for counting 1 higher and makes sure 0 isn't used
         }
     }
 

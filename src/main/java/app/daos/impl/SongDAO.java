@@ -10,7 +10,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-public class SongDAO implements IDAO<SongDTO, String> {
+public class SongDAO implements IDAO<SongDTO, Integer> {
 
     private static SongDAO instance;
     private static EntityManagerFactory emf;
@@ -24,15 +24,15 @@ public class SongDAO implements IDAO<SongDTO, String> {
     }
 
     @Override
-    public SongDTO read(String s) {
+    public SongDTO read(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
-            Song song = em.find(Song.class, s);
+            Song song = em.find(Song.class, integer);
             if (song == null) {
-                throw new DaoException.EntityNotFoundException(Song.class, s);
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
             }
             return new SongDTO(song);
         } catch (Exception e) {
-            throw new DaoException.EntityNotFoundException(Song.class, s);
+            throw new DaoException.EntityNotFoundException(Song.class, integer);
         }
     }
 
@@ -62,12 +62,12 @@ public class SongDAO implements IDAO<SongDTO, String> {
     }
 
     @Override
-    public SongDTO update(String s, SongDTO songDTO) {       // TODO correct the setting of fields
+    public SongDTO update(Integer integer, SongDTO songDTO) {       // TODO correct the setting of fields
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Song song = em.find(Song.class, s);
+            Song song = em.find(Song.class, integer);
             if (song == null) {
-                throw new DaoException.EntityNotFoundException(Song.class, s);
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
             }
             song.setName(songDTO.getName());
 //            song.setDuration(songDTO.getDuration());
@@ -75,29 +75,29 @@ public class SongDAO implements IDAO<SongDTO, String> {
             em.getTransaction().commit();
             return mergedSong != null ? new SongDTO(mergedSong) : null;
         } catch (Exception e) {
-            throw new DaoException.EntityUpdateException(Song.class, s, e);
+            throw new DaoException.EntityUpdateException(Song.class, integer, e);
         }
     }
 
     @Override
-    public void delete(String s) {
+    public void delete(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Song song = em.find(Song.class, s);
+            Song song = em.find(Song.class, integer);
             if (song == null) {
-                throw new DaoException.EntityNotFoundException(Song.class, s);
+                throw new DaoException.EntityNotFoundException(Song.class, integer);
             }
             em.remove(song);
             em.getTransaction().commit();
         } catch (Exception e) {
-            throw new DaoException.EntityDeleteException(Song.class, s, e);
+            throw new DaoException.EntityDeleteException(Song.class, integer, e);
         }
     }
 
     @Override
-    public boolean validatePrimaryKey(String s) {
+    public boolean validatePrimaryKey(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
-            Song song = em.find(Song.class, s);
+            Song song = em.find(Song.class, integer);
             return song != null;
         }
     }
