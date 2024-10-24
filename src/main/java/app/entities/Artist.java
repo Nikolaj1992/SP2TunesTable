@@ -34,8 +34,8 @@ public class Artist {
         this.id = Integer.valueOf(dto.getId());
         this.name = dto.getName();
         this.type = dto.getType();
-        this.albums = dto.getAlbums().stream().map(albumDTO -> new Album(albumDTO)).toList();
-        this.songs = dto.getSongs().stream().map(songDTO -> new Song(songDTO)).toList();
+//        this.albums = dto.getAlbums().stream().map(albumDTO -> new Album(albumDTO)).toList();
+//        this.songs = dto.getSongs().stream().map(songDTO -> new Song(songDTO)).toList();
     }
     public Artist ArtistWithID(ArtistDTO dto){ //use this to convert from dto to entity
         this.id = Integer.valueOf(dto.getId());

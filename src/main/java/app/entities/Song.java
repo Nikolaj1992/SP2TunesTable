@@ -32,8 +32,8 @@ public class Song {
         this.name = dto.getName();
         this.type = dto.getType();
         this.songNumber = dto.getSongNumber();
-        this.album = new Album(dto.getAlbum());
-        this.artist = new Artist();
+//        this.album = new Album(dto.getAlbum());
+//        this.artist = new Artist(dto.getArtist());
     }
 
     public void giveId(int existingSongs){ //do NOT run this if it already connected to an artist/album
