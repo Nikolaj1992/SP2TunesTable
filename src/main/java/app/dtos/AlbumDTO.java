@@ -1,6 +1,7 @@
 package app.dtos;
 
 import app.entities.Album;
+import app.entities.Artist;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -35,8 +36,9 @@ public class AlbumDTO {
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();
         this.releaseDate = album.getReleaseDate();
-        if (this.artists.isEmpty() && album.getArtist() != null) {
-        this.artists = List.of(new ArtistDTO(album.getArtist()));
+        List<ArtistDTO> artist = List.of(new ArtistDTO(album.getArtist()))
+        if (!this.artists.contains(artist.get(0))) {
+        this.artists = artist;
         }
         if (!album.getSongs().isEmpty()) {
         this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
