@@ -34,8 +34,12 @@ public class AlbumDTO {
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();
         this.releaseDate = album.getReleaseDate();
+        if (album.getArtist() != null) {
         this.artists = List.of(new ArtistDTO(album.getArtist()));
+        }
+        if (!album.getSongs().isEmpty()) {
         this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
+        }
     }
 
 }
