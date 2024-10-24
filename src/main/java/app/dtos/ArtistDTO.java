@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,7 +20,7 @@ public class ArtistDTO {
     String name;
     @JsonProperty("type")
     String type;
-    List<AlbumDTO> albums;
+    List<AlbumDTO> albums = new ArrayList<>();
 
     public ArtistDTO(Artist artist) {
         this.id = String.valueOf(artist.getId());

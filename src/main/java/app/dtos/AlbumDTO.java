@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,7 +25,7 @@ public class AlbumDTO {
     @JsonProperty("release_date")
     String releaseDate;
     @JsonProperty("artists")
-    List<ArtistDTO> artists;
+    List<ArtistDTO> artists = new ArrayList<>();
     @JsonProperty("tracks")
     TracksDTO tracks;
 
