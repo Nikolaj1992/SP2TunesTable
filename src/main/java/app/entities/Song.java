@@ -27,9 +27,13 @@ public class Song {
     private Artist artist; //only used for singles
 
     public Song(SongDTO dto){
+        this.id = Integer.valueOf(dto.getId());
+        this.songSearchId = dto.getSongSearchId();
         this.name = dto.getName();
         this.type = dto.getType();
         this.songNumber = dto.getSongNumber();
+        this.album = new Album(dto.getAlbum());
+        this.artist = new Artist();
     }
 
     public void giveId(int existingSongs){ //do NOT run this if it already connected to an artist/album

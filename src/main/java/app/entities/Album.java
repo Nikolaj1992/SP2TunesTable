@@ -34,14 +34,14 @@ public class Album {
     private List<Song> songs = new ArrayList<>();
 
     public Album(AlbumDTO dto) {
+        this.id = Integer.valueOf(dto.getId());
+        this.albumSearchId = dto.getAlbumSearchId();
         this.name = dto.getName();
         this.type = dto.getType();
-        if (!dto.getTracks().getSongs().isEmpty()){
         this.totalSongs = dto.getTotalSongs();
-        }
-        if (dto.getReleaseDate() != null) {
         this.releaseDate = dto.getReleaseDate();
-        }
+        this.artist = dto.getArtists().stream().map(artist -> new Artist(artist)).toList().get(0);
+        this.songs = dto.getTracks().getSongs().stream().map(song -> new Song(song)).toList();
     }
 
     public void addSongsAsDTO(List<SongDTO> songs) { //this is used by Populate
