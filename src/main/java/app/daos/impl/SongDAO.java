@@ -52,7 +52,7 @@ public class SongDAO implements IDAO<SongDTO, Integer> {
             em.getTransaction().begin();
             Song song = new Song(songDTO);
             int existingSongs = em.createQuery("SELECT COUNT(s) FROM Song s", Integer.class).getSingleResult();
-            song.giveId(existingSongs);
+            song.giveSearchId(existingSongs);
             em.persist(song);
             em.getTransaction().commit();
             return new SongDTO(song);

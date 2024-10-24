@@ -74,7 +74,7 @@ public class Album {
         }
     }
 
-    public void giveId(int existingAlbums){ //do NOT run this if it already connected to an artist
+    public void giveSearchId(int existingAlbums){ //do NOT run this if it already connected to an artist
         if (this.artist == null) {
             this.albumSearchId = "0" + "-" + (existingAlbums + 2); //the 2 makes up for counting 1 higher and makes sure 0 isn't used
         }

@@ -32,7 +32,7 @@ public class Song {
         this.songNumber = dto.getSongNumber();
     }
 
-    public void giveId(int existingSongs){ //do NOT run this if it already connected to an artist/album
+    public void giveSearchId(int existingSongs){ //do NOT run this if it already connected to an artist/album
         int number = existingSongs + 2; //the 2 makes up for counting 1 higher and makes sure 0 isn't used
         if (this.artist != null){
             this.songSearchId = artist.getId() + "-" + "0" + "-" + number;

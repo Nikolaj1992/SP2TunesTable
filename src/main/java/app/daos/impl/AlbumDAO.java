@@ -52,8 +52,8 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             em.getTransaction().begin();
             Album album = new Album(albumDTO);
             try {
-            int existingAlbums = em.createQuery("SELECT COUNT(a) FROM Album a", Integer.class).getSingleResult();
-            album.giveId(existingAlbums);
+            int existingAlbums = em.createQuery("SELECT COUNT(a) FROM Album a", Long.class).getSingleResult().intValue();
+            album.giveSearchId(existingAlbums);
             em.persist(album);
             } catch (Exception e) {
                 throw new RuntimeException("Error while creating album (DAO)", e);
