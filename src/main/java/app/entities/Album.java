@@ -55,7 +55,7 @@ public class Album {
         }
     }
 
-    public void addSongs(List<Song> songs) { //this is used by Populate
+    public void addSongs(List<Song> songs) {
         if (this.songs.isEmpty() && !songs.isEmpty()) {
             for (Song song : songs) {
                 String id;

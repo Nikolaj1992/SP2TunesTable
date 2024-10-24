@@ -8,11 +8,11 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Populate {
     public static void main(String[] args) {
-        Populate populate = new Populate();
-        populate.run();
+        run();
     }
 
-    public void run(){
+    public static void run(){ //TODO: add a user with a role to the populator
+//        System.getenv("DEPLOYED"); TODO: create admin user if NOT deployed
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         AlbumDTO albumDTO = JsonReader.readAlbum("");
         Artist artist = new Artist(albumDTO.getArtists().get(0));
@@ -21,7 +21,7 @@ public class Populate {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.persist(artist);
-            existingAlbums = 2;
+            existingAlbums = 2; //going to be a createdQuery in the final version
             availableAlbumIndex = availableAlbumIndex + existingAlbums;
             artist.addAlbumAsDTO(albumDTO,availableAlbumIndex);
             em.persist(artist);
