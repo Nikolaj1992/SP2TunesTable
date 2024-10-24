@@ -30,6 +30,7 @@ public class Populate {
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
+            createRoles(securityDAO);   // creates roles in DB if they do not exist
             createUser(securityDAO);    // creates user with role User from config.properties
             if (!"development".equalsIgnoreCase(environment) && !"testing".equalsIgnoreCase(environment)) {
                 System.out.println("Environment is not development or testing, skipping admin user creation");
@@ -77,6 +78,16 @@ public class Populate {
             System.out.println("Admin user created with username: " + adminUsername);
         } catch (Exception e) {
             System.out.println("Failed to create admin user: " + e.getMessage());
+        }
+    }
+
+    private static void createRoles(SecurityDAO securityDAO) {
+        try {
+            securityDAO.createRoleIfNotPresent(Role.ANYONE.name());
+            securityDAO.createRoleIfNotPresent(Role.USER.name());
+            securityDAO.createRoleIfNotPresent(Role.ADMIN.name());
+        } catch (Exception e) {
+            System.out.println("Failed to create roles: " + e.getMessage());
         }
     }
 
