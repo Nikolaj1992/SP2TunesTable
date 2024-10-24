@@ -36,7 +36,7 @@ public class AlbumDTO {
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();
         this.releaseDate = album.getReleaseDate();
-        List<ArtistDTO> artist = List.of(new ArtistDTO(album.getArtist()))
+        List<ArtistDTO> artist = List.of(new ArtistDTO(album.getArtist()));
         if (!this.artists.contains(artist.get(0))) {
         this.artists = artist;
         }
