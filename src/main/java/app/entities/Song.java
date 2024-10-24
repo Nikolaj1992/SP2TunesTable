@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.config.HibernateConfig;
 import app.dtos.SongDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,13 +28,15 @@ public class Song {
     private Artist artist; //only used for singles
 
     public Song(SongDTO dto){
+        try (var em = HibernateConfig.getEntityManagerFactory().createEntityManager()) {
         this.id = Integer.valueOf(dto.getId());
         this.songSearchId = dto.getSongSearchId();
         this.name = dto.getName();
         this.type = dto.getType();
         this.songNumber = dto.getSongNumber();
-        this.album = new Album(dto.getAlbum());
-        this.artist = new Artist();
+        this.album = em.find(Album.class, dto.getAlbumId());
+        this.artist = em.find(Artist.class, dto.getArtistId());
+        }
     }
 
     public void giveId(int existingSongs){ //do NOT run this if it already connected to an artist/album

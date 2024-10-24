@@ -1,6 +1,5 @@
 package app.dtos;
 
-import app.entities.Album;
 import app.entities.Artist;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,14 +19,14 @@ public class ArtistDTO {
     String name;
     @JsonProperty("type")
     String type;
-    List<AlbumDTO> albums;
-    List<SongDTO> songs;
+    List<Integer> albumIds;
+    List<Integer> songIds;
 
     public ArtistDTO(Artist artist) {
         this.id = String.valueOf(artist.getId());
         this.name = artist.getName();
         this.type = artist.getType();
-        this.albums = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();
-        this.songs = artist.getSongs().stream().map(song -> new SongDTO(song)).toList();
+        this.albumIds = artist.getAlbums().stream().map(album -> album.getId()).toList();
+        this.songIds = artist.getSongs().stream().map(song -> song.getId()).toList();
     }
 }

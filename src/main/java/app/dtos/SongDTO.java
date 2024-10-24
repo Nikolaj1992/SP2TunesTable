@@ -21,15 +21,15 @@ public class SongDTO {
     //not fetching artist, adding the primary artist manually
     @JsonProperty("track_number")
     int songNumber;
-    AlbumDTO album;
-    ArtistDTO artist;
+    Integer albumId;
+    Integer artistId;
 
     public SongDTO(Song song) {
         this.id = String.valueOf(song.getId());
         this.songSearchId = song.getSongSearchId();
         this.name = song.getName();
         this.type = song.getType();
-        this.album = new AlbumDTO(song.getAlbum());
-        this.artist = new ArtistDTO(song.getArtist());
+        this.albumId = song.getAlbum().getId();
+        this.artistId = song.getArtist().getId();
     }
 }

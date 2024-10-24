@@ -31,12 +31,16 @@ public class Artist {
     private List<Song> songs = new ArrayList<>(); //only used for singles
 
     public Artist(ArtistDTO dto){
+        try (var em = HibernateConfig.getEntityManagerFactory().createEntityManager()){
+
         this.id = Integer.valueOf(dto.getId());
         this.name = dto.getName();
         this.type = dto.getType();
-        this.albums = dto.getAlbums().stream().map(albumDTO -> new Album(albumDTO)).toList();
-        this.songs = dto.getSongs().stream().map(songDTO -> new Song(songDTO)).toList();
+        this.albums = dto.getAlbumIds().stream().map(albumDTO -> em.find(Album.class,dto.getAlbumIds())).toList();
+        this.songs = dto.getSongIds().stream().map(songDTO -> em.find(Song.class,dto.getSongIds())).toList();
+        }
     }
+
     public Artist ArtistWithID(ArtistDTO dto){ //use this to convert from dto to entity
         this.id = Integer.valueOf(dto.getId());
         this.name = dto.getName();
