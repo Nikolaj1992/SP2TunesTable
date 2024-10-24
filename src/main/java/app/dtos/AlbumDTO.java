@@ -30,18 +30,20 @@ public class AlbumDTO {
     @JsonProperty("tracks")
     TracksDTO tracks;
 
-    public AlbumDTO(Album album) {
+    public AlbumDTO(Album album, boolean includeArtist) {
         this.id = album.getAlbumSearchId();
         this.name = album.getName();
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();
         this.releaseDate = album.getReleaseDate();
-        List<ArtistDTO> artist = List.of(new ArtistDTO(album.getArtist()));
-        if (!this.artists.contains(artist.get(0))) {
-        this.artists = artist;
+
+        // Only populate artist if includeArtist is true, to prevent infinite recursion
+        if (includeArtist) {
+            this.artists = List.of(new ArtistDTO(album.getArtist(), false));  // Pass 'false' to avoid circular reference
         }
+
         if (!album.getSongs().isEmpty()) {
-        this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
+            this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
         }
     }
 

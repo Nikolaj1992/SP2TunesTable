@@ -30,7 +30,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             if (album == null) {
                 throw new DaoException.EntityNotFoundException(Album.class, integer);
             }
-            return new AlbumDTO(album);
+            return new AlbumDTO(album, false);
         } catch (Exception e) {
             throw new DaoException.EntityNotFoundException(Album.class, integer);
         }
@@ -39,7 +39,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
     @Override
     public List<AlbumDTO> readAll() {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<AlbumDTO> query = em.createQuery("SELECT new app.dtos.AlbumDTO(a) FROM Album a", AlbumDTO.class);
+            TypedQuery<AlbumDTO> query = em.createQuery("SELECT new app.dtos.AlbumDTO(a, false) FROM Album a", AlbumDTO.class);
             return query.getResultList();
         } catch (Exception e) {
             throw new DaoException.EntityFindAllException(Album.class, e);
@@ -55,7 +55,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             album.giveSearchId(existingAlbums);
             em.persist(album);
             em.getTransaction().commit();
-            return new AlbumDTO(album);
+            return new AlbumDTO(album,true);
         } catch (Exception e) {
             throw new DaoException.EntityCreateException(Album.class, e);
         }
@@ -73,7 +73,7 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
 //            a.setPopularity(albumDTO.getPopularity());
             Album mergedAlbum = em.merge(a);
             em.getTransaction().commit();
-            return mergedAlbum != null ? new AlbumDTO(mergedAlbum) : null;
+            return mergedAlbum != null ? new AlbumDTO(mergedAlbum,true) : null;
         } catch (Exception e) {
             throw new DaoException.EntityUpdateException(Album.class, integer, e);
         }

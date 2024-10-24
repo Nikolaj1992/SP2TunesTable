@@ -30,7 +30,7 @@ public class ArtistDAO implements IDAO<ArtistDTO, Integer> {
             if (artist == null) {
                 throw new DaoException.EntityNotFoundException(Artist.class, integer);
             }
-            return new ArtistDTO(artist);
+            return new ArtistDTO(artist,false);
         } catch (Exception e) {
             throw new DaoException.EntityNotFoundException(Artist.class, integer);
         }
@@ -39,7 +39,7 @@ public class ArtistDAO implements IDAO<ArtistDTO, Integer> {
     @Override
     public List<ArtistDTO> readAll() {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<ArtistDTO> query = em.createQuery("SELECT new app.dtos.ArtistDTO(a) FROM Artist a", ArtistDTO.class);
+            TypedQuery<ArtistDTO> query = em.createQuery("SELECT new app.dtos.ArtistDTO(a,false) FROM Artist a", ArtistDTO.class);
             return query.getResultList();
         } catch (Exception e) {
             throw new DaoException.EntityFindAllException(Artist.class, e);
@@ -53,7 +53,7 @@ public class ArtistDAO implements IDAO<ArtistDTO, Integer> {
             Artist artist = new Artist(artistDTO);
             em.persist(artist);
             em.getTransaction().commit();
-            return new ArtistDTO(artist);
+            return new ArtistDTO(artist,true);
         } catch (Exception e) {
             throw new DaoException.EntityCreateException(Artist.class, e);
         }
@@ -70,7 +70,7 @@ public class ArtistDAO implements IDAO<ArtistDTO, Integer> {
             a.setName(artistDTO.getName());
             Artist mergedArtist = em.merge(a);
             em.getTransaction().commit();
-            return mergedArtist != null ? new ArtistDTO(mergedArtist) : null;
+            return mergedArtist != null ? new ArtistDTO(mergedArtist,true) : null;
         } catch (Exception e) {
             throw new DaoException.EntityUpdateException(Artist.class, integer, e);
         }

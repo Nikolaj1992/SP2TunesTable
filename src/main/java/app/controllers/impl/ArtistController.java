@@ -38,7 +38,7 @@ public class ArtistController implements IController<ArtistDTO, Integer> {
             em.getTransaction().commit();
         }
         ctx.res().setStatus(200);
-        ctx.json(new ArtistDTO(artist), ArtistDTO.class);
+//        ctx.json(new ArtistDTO(artist), ArtistDTO.class);
     }
 
     @Override
