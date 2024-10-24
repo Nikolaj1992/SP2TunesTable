@@ -29,6 +29,7 @@ public class SongDTO {
         this.songSearchId = song.getSongSearchId();
         this.name = song.getName();
         this.type = song.getType();
+        this.songNumber = song.getSongNumber();
         this.album = new AlbumDTO(song.getAlbum());
         this.artist = new ArtistDTO(song.getArtist());
     }
