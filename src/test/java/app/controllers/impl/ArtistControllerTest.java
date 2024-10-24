@@ -23,7 +23,7 @@ class ArtistControllerTest {
     private ArtistDTO artist2;
 
     @BeforeAll
-    static void setUpAll() {
+    static void setUpAll() {    // TODO handle security test setup here
         HibernateConfig.setTest(true);
         emf = HibernateConfig.getEntityManagerFactoryForTest();
         app = ApplicationConfig.startServer(TEST_PORT);
@@ -71,7 +71,8 @@ class ArtistControllerTest {
         }
     }
 
-    // error from post possibly not working
+    // error from post possibly not working. This code should work once security is implemented.
+    // This would also make the entire test class more uniform.
 //    @BeforeEach
 //    void setUp() {
 //        clearArtists();
@@ -121,7 +122,7 @@ class ArtistControllerTest {
     }
 
     @Test
-    void create() {
+    void create() { // TODO factor in security roles
         given()
                 .contentType("application/json")
                 .body("{\"name\":\"Test Artist 3\", \"type\":\"artist\"}")
@@ -173,7 +174,7 @@ class ArtistControllerTest {
                 .when()
                 .get("/artists/{id}", artistId)
                 .then()
-                .statusCode(400);       // should ideally be 404
+                .statusCode(400);       // TODO should ideally be 404, add error handling
     }
 
 }
