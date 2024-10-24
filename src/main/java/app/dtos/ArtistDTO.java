@@ -1,6 +1,5 @@
 package app.dtos;
 
-import app.entities.Album;
 import app.entities.Artist;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +25,11 @@ public class ArtistDTO {
         this.id = String.valueOf(artist.getId());
         this.name = artist.getName();
         this.type = artist.getType();
-        this.albums = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();
+        List<AlbumDTO> albumDTOList = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();
+        for (AlbumDTO albumDTO : albumDTOList) {
+            if (!this.albums.contains(albumDTO)) {
+                this.albums.add(albumDTO);
+            }
+        }
     }
 }
