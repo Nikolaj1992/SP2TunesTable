@@ -46,8 +46,8 @@ POST {{url}}/api/artists/add_album
 Content-Type: application/json
 
 {
-  "artistId": 2,
-  "albumId": 3
+  "artistId": 3,
+  "albumId": 4
 }
 
 ### Retrieve all artists

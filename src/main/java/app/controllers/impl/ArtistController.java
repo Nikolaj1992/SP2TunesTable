@@ -29,13 +29,9 @@ public class ArtistController implements IController<ArtistDTO, Integer> {
         Artist artist = new Artist(artistDTO);
         try (var em = HibernateConfig.getEntityManagerFactory().createEntityManager()) {
             em.getTransaction().begin();
-            try {
             Album album = em.find(Album.class, jsonRequest.getAlbumId());
             artist.addAlbum(album);
             em.merge(artist);
-            } catch (DaoException.EntityNotFoundException e) {
-                throw new DaoException(e.getMessage());
-            }
             em.getTransaction().commit();
         }
         ctx.res().setStatus(200);
