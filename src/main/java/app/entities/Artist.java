@@ -31,8 +31,8 @@ public class Artist {
     private List<Song> songs = new ArrayList<>(); //only used for singles
 
     public Artist(ArtistDTO dto){
-        if (dto.getId() != null) {
-        this.id = Integer.valueOf(dto.getId());
+        if (dto.getArtistId() != null) {
+        this.id = dto.getArtistId();
         }
         this.name = dto.getName();
         this.type = dto.getType();

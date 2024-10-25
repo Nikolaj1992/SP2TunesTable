@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,9 +45,9 @@ class ArtistDAOTest {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Artist").executeUpdate();
             em.persist(entity1);
-            artist1.setId(String.valueOf(entity1.getId()));
+            artist1.setArtistId(String.valueOf(entity1.getId()));
             em.persist(entity2);
-            artist2.setId(String.valueOf(entity2.getId()));
+            artist2.setArtistId(String.valueOf(entity2.getId()));
             em.getTransaction().commit();
         }
     }
@@ -60,7 +59,7 @@ class ArtistDAOTest {
 
     @Test
     void read() {
-        ArtistDTO foundArtist = arDao.read(Integer.valueOf(artist1.getId()));
+        ArtistDTO foundArtist = arDao.read(Integer.valueOf(artist1.getArtistId()));
 
         assertNotNull(foundArtist);
         assertEquals(artist1.getName(), foundArtist.getName());
@@ -83,20 +82,20 @@ class ArtistDAOTest {
         newArtist.setType("artist");
         ArtistDTO createdArtist = arDao.create(newArtist);
 
-        assertNotNull(createdArtist.getId());
+        assertNotNull(createdArtist.getArtistId());
         assertEquals(newArtist.getName(), createdArtist.getName());
         assertEquals(newArtist.getType(), createdArtist.getType());
     }
 
     @Test
     void update() {
-        ArtistDTO updateArtist = arDao.read(Integer.valueOf(artist1.getId()));
+        ArtistDTO updateArtist = arDao.read(Integer.valueOf(artist1.getArtistId()));
 
         String newName = "Updated Test Artist 1";
         updateArtist.setName(newName);
 
-        ArtistDTO updatedArtist = arDao.update(Integer.valueOf(artist1.getId()), updateArtist);
-        ArtistDTO findArtist = arDao.read(Integer.valueOf(artist1.getId()));
+        ArtistDTO updatedArtist = arDao.update(Integer.valueOf(artist1.getArtistId()), updateArtist);
+        ArtistDTO findArtist = arDao.read(Integer.valueOf(artist1.getArtistId()));
 
         assertEquals(newName, updatedArtist.getName());
         assertEquals(newName, findArtist.getName());
@@ -104,7 +103,7 @@ class ArtistDAOTest {
 
     @Test
     void delete() {
-        arDao.delete(Integer.valueOf(artist1.getId()));
+        arDao.delete(Integer.valueOf(artist1.getArtistId()));
 
         List<ArtistDTO> artists = arDao.readAll();
         int expectedSize = 1;   // expected number of artists after deletion
@@ -113,7 +112,7 @@ class ArtistDAOTest {
         assertEquals(artist2.getName(), artists.get(0).getName());
 
         assertThrows(DaoException.EntityNotFoundException.class, () -> {
-            arDao.read(Integer.valueOf(artist1.getId()));
+            arDao.read(Integer.valueOf(artist1.getArtistId()));
         });
     }
 

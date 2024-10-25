@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SongDTO {
-    String id;
+    String songId;
     String songSearchId;
     @JsonProperty("name")
     String name;
@@ -26,7 +26,7 @@ public class SongDTO {
 
     public SongDTO(Song song) {
         if (song.getId() != null) {
-        this.id = String.valueOf(song.getId());
+        this.songId = String.valueOf(song.getId());
         }
         this.songSearchId = song.getSongSearchId();
         this.name = song.getName();

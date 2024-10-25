@@ -7,7 +7,6 @@ import app.entities.Artist;
 import io.javalin.Javalin;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.After;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
@@ -54,9 +53,9 @@ class ArtistControllerTest {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Artist").executeUpdate();
             em.persist(entity1);
-            artist1.setId(String.valueOf(entity1.getId()));
+            artist1.setArtistId(String.valueOf(entity1.getId()));
             em.persist(entity2);
-            artist2.setId(String.valueOf(entity2.getId()));
+            artist2.setArtistId(String.valueOf(entity2.getId()));
             em.getTransaction().commit();
         }
     }

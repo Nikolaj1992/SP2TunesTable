@@ -34,8 +34,8 @@ public class Album {
     private List<Song> songs = new ArrayList<>();
 
     public Album(AlbumDTO dto) {
-        if (dto.getId() != null) {
-        this.id = Integer.valueOf(dto.getId());
+        if (dto.getAlbumId() != null) {
+        this.id = Integer.valueOf(dto.getAlbumId());
         }
         this.albumSearchId = dto.getAlbumSearchId();
         this.name = dto.getName();

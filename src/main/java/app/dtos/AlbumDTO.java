@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AlbumDTO {
-    String id;
+    String albumId;
     String albumSearchId;
     @JsonProperty("name")
     String name;
@@ -31,7 +31,7 @@ public class AlbumDTO {
 
     public AlbumDTO(Album album) {
         if (album.getId() != null) {
-        this.id = String.valueOf(album.getId());
+        this.albumId = String.valueOf(album.getId());
         }
         this.albumSearchId = album.getAlbumSearchId();
         this.name = album.getName();
