@@ -56,12 +56,15 @@ GET {{url}}/api/artists
 ### Retrieve all albums
 GET {{url}}/api/albums
 
+### Retrieve all songs
+GET {{url}}/api/songs
+
 ### Retrieve album by id
-GET {{url}}/api/albums/1-3
+GET {{url}}/api/albums/1
 Accept: application/json
 
 ### Add a new album
-POST {{url}}/api/album
+POST {{url}}/api/albums
 Content-Type: application/json
 
 {
@@ -70,15 +73,13 @@ Content-Type: application/json
 }
 
 ###
-PUT {{url}}/api/albums/1
+PUT {{url}}/api/albums/3
 Content-Type: application/json
 
 {
-  "plantType": "Rose",
-  "name": "Gallicanae",
-  "maxHeight": 350,
-  "price": 299.50
+  "name": "test",
+  "type": "album"
 }
 
 ###
-DELETE {{url}}/api/albums/1
+DELETE {{url}}/api/albums/2

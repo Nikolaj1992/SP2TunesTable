@@ -13,6 +13,7 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SongDTO {
     String id;
+    String songSearchId;
     @JsonProperty("name")
     String name;
     @JsonProperty("type")
@@ -20,12 +21,18 @@ public class SongDTO {
     //not fetching artist, adding the primary artist manually
     @JsonProperty("track_number")
     int songNumber;
-    AlbumDTO album;
+//    AlbumDTO album;
+//    ArtistDTO artist;
 
     public SongDTO(Song song) {
-        this.id = song.getId();
+        if (song.getId() != null) {
+        this.id = String.valueOf(song.getId());
+        }
+        this.songSearchId = song.getSongSearchId();
         this.name = song.getName();
         this.type = song.getType();
-        this.album = new AlbumDTO(song.getAlbum());
+        this.songNumber = song.getSongNumber();
+//        this.album = new AlbumDTO(song.getAlbum());
+//        this.artist = new ArtistDTO(song.getArtist());
     }
 }

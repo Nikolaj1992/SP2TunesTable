@@ -20,12 +20,16 @@ public class ArtistDTO {
     String name;
     @JsonProperty("type")
     String type;
-    List<AlbumDTO> albums;
+//    List<AlbumDTO> albums;
+//    List<SongDTO> songs;
 
     public ArtistDTO(Artist artist) {
+        if (artist.getId() != null) {
         this.id = String.valueOf(artist.getId());
+        }
         this.name = artist.getName();
         this.type = artist.getType();
-        this.albums = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();
+//        this.albums = artist.getAlbums().stream().map(album -> new AlbumDTO(album)).toList();
+//        this.songs = artist.getSongs().stream().map(song -> new SongDTO(song)).toList();
     }
 }
