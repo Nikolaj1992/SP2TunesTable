@@ -12,7 +12,6 @@
         <introspection-scope>
           <node kind="database">
             <name qname="tunestable" />
-            <name qname="@" />
             <node kind="schema" qname="@" />
           </node>
         </introspection-scope>

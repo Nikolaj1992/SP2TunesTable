@@ -56,6 +56,7 @@ public class Artist {
             album.setAlbumSearchId(this.id + "-" + String.valueOf(id));
             album.addSongsAsDTO(albumDTO.getTracks().getSongs());
             album.setArtist(this);
+            album.updateSongs();
             this.albums.add(album);
         }
     }
@@ -64,6 +65,7 @@ public class Artist {
         if (!albums.contains(album)){
             album.setAlbumSearchId(this.id + "-" + (this.getAlbums().size() + 1));
             album.setArtist(this);
+            album.updateSongs();
             this.albums.add(album);
         }
     }

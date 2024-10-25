@@ -42,12 +42,12 @@ Content-Type: application/json
 }
 
 ### Add album to artist (EXPERIMENTAL METHOD)
-POST {{url}}/api/artists/1/add_album/0-1
+POST {{url}}/api/artists/add_album
 Content-Type: application/json
 
 {
-  "name": "Sire Bean",
-  "type": "artist"
+  "artistId": 3,
+  "albumId": 4
 }
 
 ### Retrieve all artists
