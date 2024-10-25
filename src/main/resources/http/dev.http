@@ -78,7 +78,7 @@ Content-Type: application/json
 
 {
   "name": "test",
-  "typeype": "album"
+  "type": "album"
 }
 
 ###
