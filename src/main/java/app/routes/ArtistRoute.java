@@ -14,7 +14,7 @@ public class ArtistRoute {
 
         return () -> {
             post("/", artistController::create);
-            post("/{id}/add_album/{id2}", artistController::addAlbum); //TODO: make id/artistId and id2/albumId part of the request
+            post("/add_album", artistController::addAlbum); //TODO: make id/artistId and id2/albumId part of the request
             get("/", artistController::readAll);
             get("/{id}", artistController::read);
             put("/{id}", artistController::update);
