@@ -40,8 +40,12 @@ public class Album {
         this.type = dto.getType();
         this.totalSongs = dto.getTotalSongs();
         this.releaseDate = dto.getReleaseDate();
+        if (dto.getArtists() != null || !dto.getArtists().isEmpty()){
         this.artist = dto.getArtists().stream().map(artist -> new Artist(artist)).toList().get(0);
+        }
+        if (dto.getTracks().getSongs() != null || !dto.getTracks().getSongs().isEmpty()){
         this.songs = dto.getTracks().getSongs().stream().map(song -> new Song(song)).toList();
+        }
     }
 
     public void addSongsAsDTO(List<SongDTO> songs) { //this is used by Populate
