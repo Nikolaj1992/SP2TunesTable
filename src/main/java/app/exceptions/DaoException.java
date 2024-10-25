@@ -20,13 +20,13 @@ public class DaoException extends RuntimeException {
     }
 
     public static class EntityDeleteException extends DaoException {
-        public EntityDeleteException(Class<?> entityClass, Integer id, Throwable cause) {
+        public EntityDeleteException(Class<?> entityClass, Object id, Throwable cause) {
             super("Failed to delete " + entityClass.getSimpleName() + " with ID " + id, cause);
         }
     }
 
     public static class EntityUpdateException extends DaoException {
-        public EntityUpdateException(Class<?> entityClass, Integer id, Throwable cause) {
+        public EntityUpdateException(Class<?> entityClass, Object id, Throwable cause) {
             super("Failed to update " + entityClass.getSimpleName() + " with ID " + id, cause);
         }
     }

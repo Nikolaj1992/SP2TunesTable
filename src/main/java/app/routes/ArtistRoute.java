@@ -13,7 +13,8 @@ public class ArtistRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            post("/", artistController::create, Role.USER);
+            post("/", artistController::create);
+            post("/{id}/add_album/{id2}", artistController::addAlbum);
             get("/", artistController::readAll);
             get("/{id}", artistController::read);
             put("/{id}", artistController::update);

@@ -1,12 +1,8 @@
 package app.entities;
 
 import app.dtos.AlbumDTO;
-import app.dtos.ArtistDTO;
 import app.dtos.SongDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -22,6 +18,7 @@ import java.util.List;
 @Entity
 public class Album {
     @Id
+    @Column(columnDefinition = "VARCHAR(255)")
     private String id; //is given right after Artist is persisted
     private String name;
     private String type;
@@ -37,11 +34,15 @@ public class Album {
     public Album(AlbumDTO dto) {
         this.name = dto.getName();
         this.type = dto.getType();
+        if (!dto.getTracks().getSongs().isEmpty()){
         this.totalSongs = dto.getTotalSongs();
+        }
+        if (dto.getReleaseDate() != null) {
         this.releaseDate = dto.getReleaseDate();
+        }
     }
 
-    public void addSongs(List<SongDTO> songs) {
+    public void addSongsAsDTO(List<SongDTO> songs) { //this is used by Populate
         if (this.songs.isEmpty() && !songs.isEmpty()) {
             for (SongDTO dto : songs) {
                 Song song = new Song(dto);
@@ -50,6 +51,30 @@ public class Album {
                 song.setAlbum(this);
                 this.songs.add(song);
             }
+                this.totalSongs = this.songs.size();
+        }
+    }
+
+    public void addSongs(List<Song> songs) {
+        if (this.songs.isEmpty() && !songs.isEmpty()) {
+            for (Song song : songs) {
+                String id;
+                if (song.getSongNumber() != 0){
+                    id = this.id + "-" + song.getSongNumber();
+                } else {
+                    id = this.id + "-" + this.songs.size()+1;
+                }
+                song.setId(id);
+                song.setAlbum(this);
+                this.songs.add(song);
+            }
+                this.totalSongs = this.songs.size();
+        }
+    }
+
+    public void giveId(int existingAlbums){ //do NOT run this if it already connected to an artist
+        if (this.artist == null) {
+            this.id = "0" + "-" + (existingAlbums + 2); //the 2 makes up for counting 1 higher and makes sure 0 isn't used
         }
     }
 

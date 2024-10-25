@@ -10,7 +10,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
+public class AlbumDAO implements IDAO<AlbumDTO, String> {
 
     private static AlbumDAO instance;
     private static EntityManagerFactory emf;
@@ -24,15 +24,15 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
     }
 
     @Override
-    public AlbumDTO read(Integer integer) {
+    public AlbumDTO read(String s) {
         try (EntityManager em = emf.createEntityManager()) {
-            Album album = em.find(Album.class, integer);
+            Album album = em.find(Album.class, s);
             if (album == null) {
-                throw new DaoException.EntityNotFoundException(Album.class, integer);
+                throw new DaoException.EntityNotFoundException(Album.class, s);
             }
             return new AlbumDTO(album);
         } catch (Exception e) {
-            throw new DaoException.EntityNotFoundException(Album.class, integer);
+            throw new DaoException.EntityNotFoundException(Album.class, s);
         }
     }
 
@@ -51,7 +51,13 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Album album = new Album(albumDTO);
+            try {
+            int existingAlbums = em.createQuery("SELECT COUNT(a) FROM Album a", Integer.class).getSingleResult();
+            album.giveId(existingAlbums);
             em.persist(album);
+            } catch (Exception e) {
+                throw new RuntimeException("Error while creating album (DAO)", e);
+            }
             em.getTransaction().commit();
             return new AlbumDTO(album);
         } catch (Exception e) {
@@ -60,12 +66,12 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
     }
 
     @Override
-    public AlbumDTO update(Integer integer, AlbumDTO albumDTO) {        // TODO correct the setting of fields
+    public AlbumDTO update(String s, AlbumDTO albumDTO) {        // TODO correct the setting of fields
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Album a = em.find(Album.class, integer);
+            Album a = em.find(Album.class, s);
             if (a == null) {
-                throw new DaoException.EntityNotFoundException(Album.class, integer);
+                throw new DaoException.EntityNotFoundException(Album.class, s);
             }
             a.setName(albumDTO.getName());
 //            a.setPopularity(albumDTO.getPopularity());
@@ -73,29 +79,29 @@ public class AlbumDAO implements IDAO<AlbumDTO, Integer> {
             em.getTransaction().commit();
             return mergedAlbum != null ? new AlbumDTO(mergedAlbum) : null;
         } catch (Exception e) {
-            throw new DaoException.EntityUpdateException(Album.class, integer, e);
+            throw new DaoException.EntityUpdateException(Album.class, s, e);
         }
     }
 
     @Override
-    public void delete(Integer integer) {
+    public void delete(String s) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Album album = em.find(Album.class, integer);
+            Album album = em.find(Album.class, s);
             if (album == null) {
-                throw new DaoException.EntityNotFoundException(Album.class, integer);
+                throw new DaoException.EntityNotFoundException(Album.class, s);
             }
             em.remove(album);
             em.getTransaction().commit();
         } catch (Exception e) {
-            throw new DaoException.EntityDeleteException(Album.class, integer, e);
+            throw new DaoException.EntityDeleteException(Album.class, s, e);
         }
     }
 
     @Override
-    public boolean validatePrimaryKey(Integer integer) {
+    public boolean validatePrimaryKey(String id) {
         try (EntityManager em = emf.createEntityManager()) {
-            Album album = em.find(Album.class, integer);
+            Album album = em.find(Album.class, id);
             return album != null;
         }
     }

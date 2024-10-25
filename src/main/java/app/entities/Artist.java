@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.config.HibernateConfig;
 import app.dtos.AlbumDTO;
 import app.dtos.ArtistDTO;
 import jakarta.persistence.*;
@@ -19,12 +20,16 @@ import java.util.List;
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(columnDefinition = "INTEGER(255)")
     private Long id;
     private String name;
     private String type;
     @OneToMany(mappedBy = "artist")
     @Cascade(CascadeType.PERSIST)
     private List<Album> albums = new ArrayList<>();
+    @OneToMany(mappedBy = "artist")
+    @Cascade(CascadeType.PERSIST) //TODO: possibly change this
+    private List<Song> songs = new ArrayList<>(); //only used for singles
 
     public Artist(ArtistDTO dto){
         this.name = dto.getName();
@@ -37,13 +42,55 @@ public class Artist {
         return this;
     }
 
-    public void addAlbum(AlbumDTO albumDTO, int id){
+    public void addSongs(List<Song> songs){
+        for (Song song : songs) {
+        if (!this.songs.contains(song)) {
+            song.setId(this.id + "-" + "0" + "-" + (this.songs.size() + 1));
+            song.setArtist(this);
+            this.songs.add(song);
+        }
+        }
+    }
+
+    public void addAlbumAsDTO(AlbumDTO albumDTO, int id){ //this is used by Populate
         Album album = new Album(albumDTO);
         if (!albums.contains(album)){
             album.setId(this.id + "-" + String.valueOf(id));
-            album.addSongs(albumDTO.getTracks().getSongs());
+            album.addSongsAsDTO(albumDTO.getTracks().getSongs());
             album.setArtist(this);
             this.albums.add(album);
         }
     }
+
+    public void addAlbum(Album album){
+        if (!albums.contains(album)){
+            album.setId(this.id + "-" + (this.getAlbums().size() + 1));
+            album.setArtist(this);
+            this.albums.add(album);
+        }
+    }
+
+    public void transferSinglesToAlbum(String albumId, String songId){
+        for (Album album : albums) {
+            if (album.getId().equals(albumId)) {
+                for (Song song : songs) {
+                    if (song.getId().equals(songId)) {
+                        if (!album.getSongs().contains(song)) {
+                            try(var em = HibernateConfig.getEntityManagerFactory().createEntityManager()){
+                                Album foundAlbum = em.find(Album.class, albumId);
+                                List<Song> singles = List.of(song);
+                                foundAlbum.addSongs(singles);
+                                this.songs.remove(song);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void transferFromAlbumToSingle(String albumId, String songId){
+        //might be able to copy a lot from the method above
+    }
+
 }
