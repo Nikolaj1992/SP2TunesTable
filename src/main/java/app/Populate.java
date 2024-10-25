@@ -38,7 +38,7 @@ public class Populate {
                 seedAdminUser(securityDAO); // creates admin user with credentials from config.properties
             }
             em.persist(artist);
-            existingAlbums = 2; //going to be a createdQuery in the final version
+            existingAlbums = 2; // TODO going to be a createdQuery in the final version
             availableAlbumIndex = availableAlbumIndex + existingAlbums;
             artist.addAlbumAsDTO(albumDTO, availableAlbumIndex);
             em.persist(artist);
