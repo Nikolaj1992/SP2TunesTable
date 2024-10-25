@@ -25,7 +25,9 @@ public class SongDTO {
 //    ArtistDTO artist;
 
     public SongDTO(Song song) {
+        if (song.getId() != null) {
         this.id = String.valueOf(song.getId());
+        }
         this.songSearchId = song.getSongSearchId();
         this.name = song.getName();
         this.type = song.getType();

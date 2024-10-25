@@ -31,17 +31,13 @@ public class Artist {
     private List<Song> songs = new ArrayList<>(); //only used for singles
 
     public Artist(ArtistDTO dto){
+        if (dto.getId() != null) {
         this.id = Integer.valueOf(dto.getId());
+        }
         this.name = dto.getName();
         this.type = dto.getType();
 //        this.albums = dto.getAlbums().stream().map(albumDTO -> new Album(albumDTO)).toList();
 //        this.songs = dto.getSongs().stream().map(songDTO -> new Song(songDTO)).toList();
-    }
-    public Artist ArtistWithID(ArtistDTO dto){ //use this to convert from dto to entity
-        this.id = Integer.valueOf(dto.getId());
-        this.name = dto.getName();
-        this.type = dto.getType();
-        return this;
     }
 
     public void addSongs(List<Song> songs){
