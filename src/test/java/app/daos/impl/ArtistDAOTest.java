@@ -45,9 +45,9 @@ class ArtistDAOTest {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Artist").executeUpdate();
             em.persist(entity1);
-            artist1.setArtistId(String.valueOf(entity1.getId()));
+            artist1.setArtistId(entity1.getId());
             em.persist(entity2);
-            artist2.setArtistId(String.valueOf(entity2.getId()));
+            artist2.setArtistId(entity2.getId());
             em.getTransaction().commit();
         }
     }

@@ -13,11 +13,11 @@ public class AlbumRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            post("/", albumController::create);
-            get("/", albumController::readAll);
-            get("/{id}", albumController::read);
-            put("/{id}", albumController::update);
-            delete("/{id}", albumController::delete); //make this turn all songs into singles or add a word to indicate they are former album songs
+            post("/", albumController::create, Role.ADMIN);
+            get("/", albumController::readAll, Role.ANYONE, Role.USER);
+            get("/{id}", albumController::read, Role.ANYONE, Role.USER);
+            put("/{id}", albumController::update, Role.ADMIN);
+            delete("/{id}", albumController::delete, Role.ADMIN); //make this turn all songs into singles or add a word to indicate they are former album songs
         };
     }
 }
