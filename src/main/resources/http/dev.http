@@ -73,15 +73,13 @@ Content-Type: application/json
 }
 
 ###
-PUT {{url}}/api/albums/1
+PUT {{url}}/api/albums/3
 Content-Type: application/json
 
 {
-  "plantType": "Rose",
-  "name": "Gallicanae",
-  "maxHeight": 350,
-  "price": 299.50
+  "name": "test",
+  "typeype": "album"
 }
 
 ###
-DELETE {{url}}/api/albums/1
+DELETE {{url}}/api/albums/2
