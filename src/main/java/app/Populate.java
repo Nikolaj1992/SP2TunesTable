@@ -87,13 +87,8 @@ public class Populate {
                         .intValue();
                 availableAlbumIndex = availableAlbumIndex + existingAlbums;
 
-                Album album = new Album(albumDTO);
-                album.setId(artist.getId() + "-" + availableAlbumIndex);
-                album.setArtist(artist);
-                album.addSongsAsDTO(albumDTO.getTracks().getSongs());
-
-                em.persist(album);
-                artist.addAlbum(album);
+                artist.addAlbumAsDTO(albumDTO, availableAlbumIndex);
+                em.persist(artist);
 
                 em.getTransaction().commit();
             }

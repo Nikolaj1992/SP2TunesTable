@@ -1,12 +1,9 @@
 package app.dtos;
 
-import app.entities.Album;
 import app.entities.Artist;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArtistDTO {
-    String id;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    Integer artistId;
     @JsonProperty("name")
     String name;
     @JsonProperty("type")
@@ -25,7 +23,7 @@ public class ArtistDTO {
 
     public ArtistDTO(Artist artist) {
         if (artist.getId() != null) {
-        this.id = String.valueOf(artist.getId());
+        this.artistId = artist.getId();
         }
         this.name = artist.getName();
         this.type = artist.getType();

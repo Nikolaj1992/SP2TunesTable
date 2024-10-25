@@ -27,8 +27,8 @@ public class Song {
     private Artist artist; //only used for singles
 
     public Song(SongDTO dto){
-        if (dto.getId() != null) {
-        this.id = Integer.valueOf(dto.getId());
+        if (dto.getSongId() != null) {
+        this.id = Integer.valueOf(dto.getSongId());
         }
         this.songSearchId = dto.getSongSearchId();
         this.name = dto.getName();
