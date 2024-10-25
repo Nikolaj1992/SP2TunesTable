@@ -2,6 +2,7 @@ package app;
 
 import app.config.HibernateConfig;
 import app.dtos.AlbumDTO;
+import app.entities.Album;
 import app.entities.Artist;
 import app.security.daos.SecurityDAO;
 import app.security.enums.Role;
@@ -10,6 +11,7 @@ import app.utils.json.JsonReader;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
 import java.util.Set;
 
 public class Populate {
@@ -17,32 +19,89 @@ public class Populate {
         run();
     }
 
+    // Old run method for one album
+//    public static void run(){
+//        // Environment state and credentials for user/admin handled in config.properties via Utils class
+//        String environment = Utils.getPropertyValue("ENVIRONMENT", "config.properties");
+//        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+//        SecurityDAO securityDAO = new SecurityDAO(emf);     // securityDao handles creation of users and roles
+//
+//        AlbumDTO albumDTO = JsonReader.readAlbum("");
+//        Artist artist = new Artist(albumDTO.getArtists().get(0));
+//        int availableAlbumIndex = 1; //starts at one because place 0 is for singles
+//        int existingAlbums = 0;
+//
+//        try (var em = emf.createEntityManager()) {
+//            em.getTransaction().begin();
+//            createRoles(securityDAO);   // creates roles in DB if they do not exist
+//            createUser(securityDAO);    // creates user with role User from config.properties
+//            if (!"development".equalsIgnoreCase(environment) && !"testing".equalsIgnoreCase(environment)) {
+//                System.out.println("Environment is not development or testing, skipping admin user creation");
+//            } else {
+//                seedAdminUser(securityDAO); // creates admin user with credentials from config.properties
+//            }
+//            em.persist(artist);
+//            existingAlbums = 2; // TODO going to be a createdQuery in the final version
+//            availableAlbumIndex = availableAlbumIndex + existingAlbums;
+//            artist.addAlbumAsDTO(albumDTO, availableAlbumIndex);
+//            em.persist(artist);
+//            em.getTransaction().commit();
+//        }
+//    }
+
+    // New run method for multiple albums
     public static void run(){
         // Environment state and credentials for user/admin handled in config.properties via Utils class
         String environment = Utils.getPropertyValue("ENVIRONMENT", "config.properties");
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         SecurityDAO securityDAO = new SecurityDAO(emf);     // securityDao handles creation of users and roles
 
-        AlbumDTO albumDTO = JsonReader.readAlbum("");
-        Artist artist = new Artist(albumDTO.getArtists().get(0));
-        int availableAlbumIndex = 1; //starts at one because place 0 is for singles
-        int existingAlbums = 0;
+        List<AlbumDTO> albumDTOs = JsonReader.readAlbums("");
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             createRoles(securityDAO);   // creates roles in DB if they do not exist
             createUser(securityDAO);    // creates user with role User from config.properties
+
             if (!"development".equalsIgnoreCase(environment) && !"testing".equalsIgnoreCase(environment)) {
                 System.out.println("Environment is not development or testing, skipping admin user creation");
             } else {
                 seedAdminUser(securityDAO); // creates admin user with credentials from config.properties
             }
-            em.persist(artist);
-            existingAlbums = 2; // TODO going to be a createdQuery in the final version
-            availableAlbumIndex = availableAlbumIndex + existingAlbums;
-            artist.addAlbumAsDTO(albumDTO, availableAlbumIndex);
-            em.persist(artist);
+
             em.getTransaction().commit();
+
+            int availableAlbumIndex = 1; //starts at one because place 0 is for singles
+            for (AlbumDTO albumDTO : albumDTOs) {
+                em.getTransaction().begin();
+
+                Artist artist = new Artist(albumDTO.getArtists().get(0));
+                em.persist(artist);
+
+                em.flush();     // Flush to get the artist ID
+
+                int existingAlbums = em.createQuery(
+                        "SELECT COUNT(a) FROM Album a WHERE a.artist.id = :artistId", Long.class)
+                        .setParameter("artistId", artist.getId())   // Artist should have ID from persist above
+                        .getSingleResult()
+                        .intValue();
+                availableAlbumIndex = availableAlbumIndex + existingAlbums;
+
+                Album album = new Album(albumDTO);
+                album.setId(artist.getId() + "-" + availableAlbumIndex);
+                album.setArtist(artist);
+                album.addSongsAsDTO(albumDTO.getTracks().getSongs());
+
+                em.persist(album);
+                artist.addAlbum(album);
+
+                em.getTransaction().commit();
+            }
+
+            System.out.println("Albums added to database");
+        } catch (Exception e) {
+            System.out.println("Failed to add albums to database: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

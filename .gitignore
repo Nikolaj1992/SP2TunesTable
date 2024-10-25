@@ -219,8 +219,8 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,osx,windows,intellij!/src/main/resources/http/http-client.env.json
 /src/main/resources/http/http-client.env.json
 http-client.env.json
-dataSources.xml
-dataSources.local.xml
+/.idea/dataSources.xml
+/.idea/dataSources.local.xml
 
 /.idea/dataSources/8922d8f0-de46-4e44-b4cc-bcc0aaf2fb6d.xml
 8922d8f0-de46-4e44-b4cc-bcc0aaf2fb6d.xml
