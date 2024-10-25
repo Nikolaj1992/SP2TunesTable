@@ -30,14 +30,20 @@ public class AlbumDTO {
     TracksDTO tracks;
 
     public AlbumDTO(Album album) {
+        if (album.getId() != null) {
         this.id = String.valueOf(album.getId());
+        }
         this.albumSearchId = album.getAlbumSearchId();
         this.name = album.getName();
         this.type = album.getType();
         this.totalSongs = album.getTotalSongs();
         this.releaseDate = album.getReleaseDate();
+        if (album.getArtist() != null) {
         this.artists = List.of(new ArtistDTO(album.getArtist()));
+        }
+        if (album.getSongs() != null) {
         this.tracks = new TracksDTO(album.getSongs().stream().map(song -> new SongDTO(song)).toList());
+        }
     }
 
 }

@@ -34,23 +34,27 @@ public class Album {
     private List<Song> songs = new ArrayList<>();
 
     public Album(AlbumDTO dto) {
+        if (dto.getId() != null) {
         this.id = Integer.valueOf(dto.getId());
+        }
         this.albumSearchId = dto.getAlbumSearchId();
         this.name = dto.getName();
         this.type = dto.getType();
         this.totalSongs = dto.getTotalSongs();
         this.releaseDate = dto.getReleaseDate();
-        if (dto.getArtists() != null || !dto.getArtists().isEmpty()){
+        if (dto.getArtists() != null){
         this.artist = dto.getArtists().stream().map(artist -> new Artist(artist)).toList().get(0);
         }
-        if (dto.getTracks().getSongs() != null || !dto.getTracks().getSongs().isEmpty()){
-        this.songs = dto.getTracks().getSongs().stream().map(song -> new Song(song)).toList();
+        if (dto.getTracks() != null){ //problem starts down here
+            if (dto.getTracks().getSongs() != null) {
+                this.songs = dto.getTracks().getSongs().stream().map(song -> new Song(song)).toList();
+            }
         }
     }
 
-    public void addSongsAsDTO(List<SongDTO> songs) { //this is used by Populate
-        if (this.songs.isEmpty() && !songs.isEmpty()) {
-            for (SongDTO dto : songs) {
+    public void addSongsAsDTO(List<SongDTO> songsDTO) { //this is used by Populate
+        if (this.songs.isEmpty() && !songsDTO.isEmpty()) {
+            for (SongDTO dto : songsDTO) {
                 Song song = new Song(dto);
                 String id = this.albumSearchId + "-" + song.getSongNumber();
                 song.setSongSearchId(id);
@@ -61,9 +65,9 @@ public class Album {
         }
     }
 
-    public void addSongs(List<Song> songs) {
-        if (this.songs.isEmpty() && !songs.isEmpty()) {
-            for (Song song : songs) {
+    public void addSongs(List<Song> songsS) {
+        if (this.songs.isEmpty() && !songsS.isEmpty()) {
+            for (Song song : songsS) {
                 String id;
                 if (song.getSongNumber() != 0){
                     id = this.albumSearchId + "-" + song.getSongNumber();
