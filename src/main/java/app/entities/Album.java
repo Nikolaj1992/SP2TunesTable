@@ -54,14 +54,13 @@ public class Album {
 
     public void addSongsAsDTO(List<SongDTO> songsDTO) { //this is used by Populate
         if (this.songs.isEmpty() && !songsDTO.isEmpty()) {
-            for (SongDTO dto : songsDTO) {
-                Song song = new Song(dto);
-                String id = this.albumSearchId + "-" + song.getSongNumber();
+            for (int i = 0; i < totalSongs; i++) {
+                Song song = new Song(songsDTO.get(i));
+                String id = this.albumSearchId + "-" + (i +1 );
                 song.setSongSearchId(id);
                 song.setAlbum(this);
                 this.songs.add(song);
             }
-                this.totalSongs = this.songs.size();
         }
     }
 
@@ -84,8 +83,8 @@ public class Album {
 
     public void updateSongs(){
         if (!this.songs.isEmpty()){
-            for (Song song : this.songs){
-                song.setSongSearchId(this.albumSearchId + "-" + song.getSongNumber());
+            for (int i = 0; i < totalSongs; i++) {
+                songs.get(i).setSongSearchId(this.albumSearchId + "-" + (i + 1));
             }
         }
     }
