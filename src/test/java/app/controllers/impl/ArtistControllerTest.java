@@ -18,8 +18,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArtistControllerTest {
@@ -70,6 +69,8 @@ class ArtistControllerTest {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Album ").executeUpdate();
             em.createQuery("DELETE FROM Artist ").executeUpdate();
+            em.createQuery("DELETE FROM Role").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE album_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE artist_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
@@ -160,6 +161,7 @@ class ArtistControllerTest {
                     .extract()
                     .as(new TypeRef<ArtistDTO>() {});
 
+        assertThat(newArtist.getArtistId(), is(notNullValue()));
         assertThat(newArtist.getName(), is("Test Artist 3"));
 
         List<ArtistDTO> artists =
@@ -192,6 +194,7 @@ class ArtistControllerTest {
                         .extract()
                         .as(new TypeRef<ArtistDTO>() {});
 
+        assertThat(updatedArtist.getArtistId(), is(artistId));
         assertThat(updatedArtist.getName(), is("Updated Artist 1"));
     }
 
@@ -208,7 +211,7 @@ class ArtistControllerTest {
                 .when()
                 .delete("/artists/{id}", artistId)
                 .then()
-                .statusCode(200);       // TODO should ideally be 204, add error handling
+                .statusCode(204);
 
         // Check that the artist was deleted
         given()

@@ -1,8 +1,6 @@
 package app.controllers.impl;
 
-import app.dtos.AlbumDTO;
 import app.dtos.ArtistDTO;
-import app.entities.Album;
 import app.entities.Artist;
 import app.security.entities.Role;
 import app.security.entities.User;
@@ -50,29 +48,11 @@ public class Populator {
         Artist entity1 = new Artist(artist1);
         Artist entity2 = new Artist(artist2);
 
-        AlbumDTO album1;
-        AlbumDTO album2;
-
-        album1 = new AlbumDTO();
-        album1.setName("Test Album 1");
-        album1.setType("album");
-
-        album2 = new AlbumDTO();
-        album2.setName("Test Album 2");
-        album2.setType("album");
-
-        Album entity3 = new Album(album1);
-        Album entity4 = new Album(album2);
-
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Artist").executeUpdate();
             em.persist(entity1);
             em.persist(entity2);
-            entity3.setArtist(entity1);
-            entity4.setArtist(entity2);
-            em.persist(entity3);
-            em.persist(entity4);
             em.getTransaction().commit();
         }
     }
