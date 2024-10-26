@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArtistDTO {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
     Integer artistId;
     @JsonProperty("name")
     String name;

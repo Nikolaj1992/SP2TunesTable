@@ -13,11 +13,11 @@ public class SongRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            post("/", songController::create);
-            get("/", songController::readAll);
-            get("/{id}", songController::read);
-            put("/{id}", songController::update);
-            delete("/{id}", songController::delete);
+            post("/", songController::create, Role.ADMIN);
+            get("/", songController::readAll, Role.ANYONE, Role.USER);
+            get("/{id}", songController::read, Role.ANYONE, Role.USER);
+            put("/{id}", songController::update, Role.ADMIN);
+            delete("/{id}", songController::delete, Role.ADMIN);
         };
     }
 }

@@ -13,12 +13,12 @@ public class ArtistRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            post("/", artistController::create);
-            post("/add_album", artistController::addAlbum); //TODO: make id/artistId and id2/albumId part of the request
-            get("/", artistController::readAll);
-            get("/{id}", artistController::read);
-            put("/{id}", artistController::update);
-            delete("/{id}", artistController::delete);
+            post("/", artistController::create, Role.ADMIN);
+            post("/add_album", artistController::addAlbum, Role.ADMIN); //TODO: make id/artistId and id2/albumId part of the request
+            get("/", artistController::readAll, Role.ANYONE, Role.USER);
+            get("/{id}", artistController::read, Role.ANYONE, Role.USER);
+            put("/{id}", artistController::update, Role.ADMIN);
+            delete("/{id}", artistController::delete, Role.ADMIN);
         };
     }
 }

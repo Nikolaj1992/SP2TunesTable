@@ -22,6 +22,15 @@ POST {{url}}/api/auth/login/
     console.log("JWT Token:", client.global.get("jwt_token"));
 %}
 
+### Add new role to user, for test only
+POST {{url}}/api/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "ADMIN"
+}
+
 ###
 GET {{url}}/api/protected/user_demo/
 Accept: application/json
@@ -31,6 +40,8 @@ Authorization: Bearer {{jwt_token}}
 GET {{url}}/api/protected/admin_demo/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
+
+
 
 ### Add a new artist
 POST {{url}}/api/artists
@@ -48,8 +59,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "artistId": 3,
-  "albumId": 4
+  "artistId": 2,
+  "albumId": 2
 }
 
 ### Retrieve all artists
@@ -76,7 +87,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ###
-PUT {{url}}/api/albums/3
+PUT {{url}}/api/albums/2
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
