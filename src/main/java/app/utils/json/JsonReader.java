@@ -64,8 +64,11 @@ public class JsonReader {
             } else {
                 rootNode = objectMapper.readTree(new File(filePath));
             }
-            if (rootNode.isArray()) {
-                for (JsonNode albumNode : rootNode) {
+
+            JsonNode albumsNode = rootNode.path("albums");
+
+            if (albumsNode.isArray()) {
+                for (JsonNode albumNode : albumsNode) {
                     AlbumDTO album = objectMapper.treeToValue(albumNode, AlbumDTO.class);
 
                     List<SongDTO> songs = objectMapper.treeToValue(albumNode.path("tracks").path("items"),
