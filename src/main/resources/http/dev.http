@@ -35,6 +35,7 @@ Authorization: Bearer {{jwt_token}}
 ### Add a new artist
 POST {{url}}/api/artists
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Sire Bean",
@@ -44,6 +45,7 @@ Content-Type: application/json
 ### Add album to artist (EXPERIMENTAL METHOD)
 POST {{url}}/api/artists/add_album
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "artistId": 3,
@@ -66,6 +68,7 @@ Accept: application/json
 ### Add a new album
 POST {{url}}/api/albums
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Gallicanae",
@@ -75,6 +78,7 @@ Content-Type: application/json
 ###
 PUT {{url}}/api/albums/3
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "test",
@@ -83,3 +87,4 @@ Content-Type: application/json
 
 ###
 DELETE {{url}}/api/albums/2
+Authorization: Bearer {{jwt_token}}
