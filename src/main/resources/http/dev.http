@@ -88,3 +88,6 @@ Authorization: Bearer {{jwt_token}}
 ###
 DELETE {{url}}/api/albums/2
 Authorization: Bearer {{jwt_token}}
+
+### Populate the database with some data
+GET {{url}}/api/albums/populate/

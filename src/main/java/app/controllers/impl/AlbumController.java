@@ -81,4 +81,11 @@ public class AlbumController implements IController<AlbumDTO, Integer> {
 //                .check(dto -> dto.getName() != null && dto.getName().length() > 0, "Name cannot be null or empty")
                 .get();
     }
+
+    public void populate(Context ctx) {
+        dao.populate();
+        ctx.res().setStatus(200);
+        ctx.json("{ \"msg\": \"Database has been populated\" }");
+    }
+
 }

@@ -13,6 +13,7 @@ public class AlbumRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
+            get("/populate", albumController::populate, Role.USER);        // this is a test so far
             post("/", albumController::create, Role.ADMIN);
             get("/", albumController::readAll, Role.ANYONE, Role.USER);
             get("/{id}", albumController::read, Role.ANYONE, Role.USER);
