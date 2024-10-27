@@ -1,5 +1,11 @@
 package app.config;
 
+import app.entities.Album;
+import app.entities.Artist;
+import app.entities.Song;
+import app.security.entities.Role;
+import app.security.entities.User;
+import app.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -12,25 +18,41 @@ public class HibernateConfig {
 
     private static EntityManagerFactory emf;
     private static EntityManagerFactory emfTest;
+    private static Boolean isTest = false;
 
-    public static EntityManagerFactory getEntityManagerFactory(String DBName) {
+    public static void setTest(Boolean test) {
+        isTest = test;
+    }
+
+    public static Boolean getTest() {
+        return isTest;
+    }
+
+    public static EntityManagerFactory getEntityManagerFactory() {
         if (emf == null)
-            emf = createEMF(false, DBName);
+            emf = createEMF(getTest());
         return emf;
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
-        if (emfTest == null)
-            emfTest = createEMF(true, "");  // No DB needed for test
+        if (emfTest == null){
+            setTest(true);
+            emfTest = createEMF(getTest());  // No DB needed for test
+        }
         return emfTest;
     }
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-//        configuration.addAnnotatedClass(Poem.class);
+        configuration.addAnnotatedClass(Artist.class);
+        configuration.addAnnotatedClass(Album.class);
+        configuration.addAnnotatedClass(Song.class);
+        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Role.class);
+//        configuration.addAnnotatedClass(Hotel.class);
     }
 
-    private static EntityManagerFactory createEMF(boolean forTest, String DBName) {
+    private static EntityManagerFactory createEMF(boolean forTest) {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
@@ -39,9 +61,9 @@ public class HibernateConfig {
             if (forTest) {
                 props = setTestProperties(props);
             } else if (System.getenv("DEPLOYED") != null) {
-                setDeployedProperties(props, DBName);
+                setDeployedProperties(props);
             } else {
-                props = setDevProperties(props, DBName);
+                props = setDevProperties(props);
             }
             configuration.setProperties(props);
             getAnnotationConfiguration(configuration);
@@ -64,35 +86,38 @@ public class HibernateConfig {
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
         props.put("hibernate.hbm2ddl.auto", "update");
         props.put("hibernate.current_session_context_class", "thread");
-        props.put("hibernate.show_sql", "false");   // Set to true for debugging
+        props.put("hibernate.show_sql", "true");
         props.put("hibernate.format_sql", "true");
         props.put("hibernate.use_sql_comments", "true");
         return props;
     }
 
-    private static Properties setDeployedProperties(Properties props, String DBName) {
+    private static Properties setDeployedProperties(Properties props) {
+        String DBName = System.getenv("DB_NAME");
         props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + DBName);
         props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
         props.setProperty("hibernate.connection.password", System.getenv("DB_PASSWORD"));
         return props;
     }
 
-    private static Properties setDevProperties(Properties props, String DBName) {
+    private static Properties setDevProperties(Properties props) {
+        String DBName = Utils.getPropertyValue("DB_NAME", "config.properties");
         props.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/" + DBName);
-        props.put("hibernate.connection.username", System.getenv("DB_USERNAME"));
-        props.put("hibernate.connection.password", System.getenv("DB_PASSWORD"));
+        props.put("hibernate.connection.username", "postgres");
+//        props.put("hibernate.connection.password", System.getenv("DB_PASSWORD")); //having this on causes a nullpointerexception
+        props.put("hibernate.connection.password","postgres");
         return props;
     }
 
     private static Properties setTestProperties(Properties props) {
-        //        props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        //props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.connection.driver_class", "org.testcontainers.jdbc.ContainerDatabaseDriver");
         props.put("hibernate.connection.url", "jdbc:tc:postgresql:15.3-alpine3.18:///test_db");
         props.put("hibernate.connection.username", "postgres");
         props.put("hibernate.connection.password", "postgres");
         props.put("hibernate.archive.autodetection", "class");
         props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "create-drop"); // upappe for production
+        props.put("hibernate.hbm2ddl.auto", "create-drop"); // update for production
         return props;
     }
 }
