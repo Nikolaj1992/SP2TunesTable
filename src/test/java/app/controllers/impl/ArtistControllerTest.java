@@ -20,7 +20,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@Disabled("Temporarily ignoring this test due to maven issues")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArtistControllerTest {
 
