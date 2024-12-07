@@ -14,6 +14,7 @@ import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Populate {
@@ -28,11 +29,9 @@ public class Populate {
             List<Song> songList = em.createQuery("select a from Song a").getResultList();
             if (artistList.isEmpty() && albumList.isEmpty() && songList.isEmpty()) {
                 runMulti();
-                ctx.res().setStatus(200);
-                ctx.json("Database populated");
+                ctx.json(Map.of("status", "success", "message", "Database populated"));
             } else {
-                ctx.res().setStatus(400);
-                ctx.json("Database already populated");
+                ctx.json(Map.of("status", "error", "message", "Database already populated"));
             }
         }
     }
