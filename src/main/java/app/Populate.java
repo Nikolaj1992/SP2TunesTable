@@ -28,6 +28,22 @@ public class Populate {
             List<Song> songList = em.createQuery("select a from Song a").getResultList();
             if (artistList.isEmpty() && albumList.isEmpty() && songList.isEmpty()) {
                 runMulti();
+                ctx.res().setStatus(200);
+                ctx.json("Database populated");
+            } else {
+                ctx.res().setStatus(400);
+                ctx.json("Database already populated");
+            }
+        }
+    }
+
+    public void runIfEmpty() {
+        try (var em = HibernateConfig.getEntityManagerFactory().createEntityManager()) {
+            List<Artist> artistList = em.createQuery("select a from Artist a").getResultList();
+            List<Album> albumList = em.createQuery("select a from Album a").getResultList();
+            List<Song> songList = em.createQuery("select a from Song a").getResultList();
+            if (artistList.isEmpty() && albumList.isEmpty() && songList.isEmpty()) {
+                runMulti();
             }
         }
     }
